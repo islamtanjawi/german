@@ -1,2 +1,2 @@
-// Set apiBase to the URL of your deployed Cloudflare Worker, without a trailing slash.
-window.AcademyCloudConfig={apiBase:''};
+// Public API endpoint (no passwords or access tokens here).
+window.AcademyCloudConfig={apiBase:'https://german-academy-accounts.german-academy-tanjawi.workers.dev'};

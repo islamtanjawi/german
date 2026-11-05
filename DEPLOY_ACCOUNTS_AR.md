@@ -8,12 +8,13 @@
 
 ```bash
 npx wrangler login
-npx wrangler d1 create german-academy-accounts
 ```
 
-انسخ `database_id` الذي ترجع به الأداة إلى `backend/wrangler.jsonc` بدلاً من `REPLACE_WITH_D1_DATABASE_ID`.
+قاعدة البيانات أُنشئت سابقاً وتم إدخال معرّفها الفعلي في ملف `backend/wrangler.jsonc`. **لا تنشئ قاعدة أخرى**. تحقق من أنك تستخدم حساب Cloudflare نفسه الذي أنشأ القاعدة.
 
 ## 2) إنشاء الجداول ونشر الخدمة
+
+تأكد أن نافذة CMD داخل مجلد `backend`، وأن ملف `wrangler.jsonc` يحتوي على الربط `DB` فقط. أنشئ الجداول مرة واحدة عبر الأمر الأول، ثم انشر الخدمة عبر الثاني. لا تضع رابط Worker تخمينياً في إعدادات الموقع.
 
 ```bash
 npx wrangler d1 migrations apply german-academy-accounts --remote
