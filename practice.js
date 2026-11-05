@@ -100,6 +100,13 @@ function markComplete(l,m,i){const key=taskKey(l,m,i);const update={...done,[key
 function say(text){if(!('speechSynthesis' in window)){window.UI?.toast('النطق الآلي غير متاح في هذا المتصفح.');return}const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.86;speechSynthesis.cancel();speechSynthesis.speak(u)}
 function reset(){showText=false;answered=null;transcript='';writeChecks={content:false,review:false};speakChecks={task:false,pronunciation:false};render()}
 function warn(text){const el=$('#practiceMessage');if(el)el.textContent=text;window.UI?.toast(text)}
+// Move the reader to the opened workshop only following an explicit navigation action.
+function revealWorkshop(){
+ const target=$('#workshop');if(!target)return;
+ const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ requestAnimationFrame(()=>target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}));
+}
+
 function render(){
  if(!PATH?.levelOpen(level)){level='A1';mode='listen';idx=0}
  if(!modeOpen(level,mode)){mode='listen';idx=0}
@@ -137,11 +144,11 @@ $('#listeningReview').addEventListener('click',e=>{
  const b=e.target.closest('[data-review-listen]');if(!b)return;
  const i=Number(b.dataset.reviewListen);
  if(!Number.isInteger(i)||!taskOpen(level,'listen',i))return;
- mode='listen';idx=i;reset();
+ mode='listen';idx=i;reset();revealWorkshop();
 });
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
- if(b.dataset.mode){if(!modeOpen(level,b.dataset.mode))return;mode=b.dataset.mode;idx=0;reset();return}
- if(b.dataset.level){if(!PATH?.levelOpen(b.dataset.level))return;level=b.dataset.level;mode='listen';idx=0;reset();return}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b){const card=e.target.closest('.skill-card');const button=card?.querySelector('button[data-mode]');if(button&&!button.disabled)button.click();return}
+ if(b.dataset.mode){if(!modeOpen(level,b.dataset.mode))return;mode=b.dataset.mode;idx=0;reset();revealWorkshop();return}
+ if(b.dataset.level){if(!PATH?.levelOpen(b.dataset.level))return;level=b.dataset.level;mode='listen';idx=0;reset();revealWorkshop();return}
  if(b.dataset.listen!==undefined){say(mode==='speak'?sets[level][idx].sample:sets[level][idx].de);return}
  if(b.dataset.toggle!==undefined){showText=!showText;render();return}
  if(b.dataset.option!==undefined&&answered===null&&mode==='listen'){
