@@ -1,0 +1,47 @@
+{
+  "version": "V49",
+  "status": "development",
+  "built_from": "V48 (V47 content and V48 draft-save fix retained)",
+  "content": {
+    "practice_total": 72,
+    "levels": {
+      "A1": 24,
+      "A2": 24,
+      "B1": 24
+    },
+    "new_listening_tasks": 9,
+    "new_speaking_tasks": 9,
+    "new_writing_tasks": 9,
+    "core_activity_count": 45,
+    "optional_reinforcement": 27
+  },
+  "tests": {
+    "javascript_checked": 21,
+    "html_pages": 11,
+    "missing_local_assets": 0,
+    "chromium_synthetic_dom": {
+      "passed": true,
+      "browser": "Chromium in document-injection harness (normal local navigation blocked)",
+      "checks": [
+        "listening wrong does not unlock",
+        "listening mistake persists across reinitialization",
+        "correct answer resolves pending mistake",
+        "8 A1 listening lessons tested and unlock speaking",
+        "Goethe review wrong retry reopens mistake",
+        "old five-task completion keeps speaking unlocked",
+        "writing minimum and two self-checks required",
+        "responsive 360 375 768 1280 no horizontal overflow"
+      ]
+    },
+    "live_cloudflare_or_github_pages_tested": false,
+    "offline_service_worker_live_tested": false,
+    "linguistic_full_audit": false
+  },
+  "notes": [
+    "New practice mistakes storage key begins with deutsch- and is included in existing backup/sync collection.",
+    "Existing activity indices 0-4 and previous saved progress keys unchanged.",
+    "Three optional drills per skill/level are added after five original core items; each new drill unlocks after the preceding drill.",
+    "Speech recognition and pronunciation are browser dependent and not officially evaluated.",
+    "Cloud account synchronization requires actual deployment and configuration."
+  ]
+}

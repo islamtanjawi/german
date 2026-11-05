@@ -1,0 +1,1 @@
+V46: transactional local progress replacement with validation and rollback on browser quota/storage failure; preserves account data on failed cross-account changes. Added 18 manually checked A1–B1 present-tense verb tables, and 18 original Goethe practice questions (3 Lesen + 3 Hören per level, total 102). Updated offline cache. Cloud remains unconfigured until deployed.

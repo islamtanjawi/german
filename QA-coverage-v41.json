@@ -1,0 +1,28 @@
+{
+  "reviewedTables": 139,
+  "irregularTables": 44,
+  "added": 98,
+  "byLevel": [
+    {
+      "level": "A1",
+      "entries": 450,
+      "reviewed": 111
+    },
+    {
+      "level": "A2",
+      "entries": 450,
+      "reviewed": 36
+    },
+    {
+      "level": "B1",
+      "entries": 450,
+      "reviewed": 38
+    }
+  ],
+  "covered": 185,
+  "notes": [
+    "Coverage counts only explicitly listed six-form Präsens tables (including irregular forms), not regular heuristic inflections.",
+    "No claim of all 1,350 verb entries being linguistically verified.",
+    "Automatically graded conjugation questions use explicit table entries only."
+  ]
+}

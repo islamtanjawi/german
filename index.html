@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<script>try{var t=JSON.parse(localStorage.getItem("deutsch-ui")).theme;if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<meta name="description" content="منصة شخصية لتعلّم الألمانية من A1 إلى B1 مع كلمات يومية واختبارات ومراجعة ذكية.">
+<title>مدرّبي الألماني | A1 – B1</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"></head>
+<body>
+<header>
+  <div class="brand"><span class="brand-icon">DE</span><div><h1>مدرّبي الألماني <small>A1 – B1</small></h1><p>خطوة صغيرة كل يوم تصنع فرقاً كبيراً.</p></div></div>
+  <div class="top-stats"><span id="stat"></span><span id="streak" class="streak"></span></div>
+</header>
+<nav id="months" aria-label="المستويات"><a href="review.html">🧠 مراجعة الأخطاء</a><a href="exam-review.html">📘 أخطاء Goethe</a></nav>
+<main>
+  <section id="head"></section>
+  <section id="dashboard" class="dashboard"></section>
+  <div class="learning-shell">
+    <aside class="learning-menu" aria-label="خريطة التعلم">
+      <div class="menu-heading"><span class="eyebrow">مسارك اليوم</span><h2>اختر ما تريد تعلمه</h2><p>أقسام مرتبة وواضحة. أكمل المرحلة المفتوحة أولاً لفتح التي بعدها.</p></div>
+      <div class="tabs" role="tablist" aria-label="أقسام التعلم اليومية">
+        <button data-tab="words" class="on menu-entry" role="tab" aria-selected="true"><span class="menu-icon">📚</span><span class="menu-copy"><strong>كلمات اليوم</strong><small>مفردات مرتبة يوماً بعد يوم</small></span></button>
+        <button data-tab="sent" class="menu-entry" role="tab" aria-selected="false"><span class="menu-icon">💬</span><span class="menu-copy"><strong>جمل شائعة</strong><small>اقرأ واستمع وتدرّب</small></span></button>
+        <button data-tab="quiz" class="menu-entry" role="tab" aria-selected="false"><span class="menu-icon">🧠</span><span class="menu-copy"><strong>اختبر كلماتك</strong><small>اجتز الاختبار لفتح اليوم التالي</small></span></button>
+        <button data-tab="review" class="menu-entry" role="tab" aria-selected="false"><span class="menu-icon">🔁</span><span class="menu-copy"><strong>مراجعة الأخطاء <span id="review-count" class="count">0</span></strong><small>ارجع إلى ما يحتاج تثبيتاً</small></span></button>
+      </div>
+      <div class="menu-heading menu-subheading"><h3>أقسام الأكاديمية</h3></div>
+      <div class="menu-links">
+        <a class="menu-entry" href="lessons.html"><span class="menu-icon">🎓</span><span class="menu-copy"><strong>الدروس</strong><small>قواعد وشروح وتمارين متدرجة</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="conjugation.html"><span class="menu-icon">🔤</span><span class="menu-copy"><strong>الصرف والتحويل</strong><small>أفعال وأيام واختبارات</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="practice.html"><span class="menu-icon">🎧</span><span class="menu-copy"><strong>الاستماع والتحدث والكتابة</strong><small>45 تدريباً عملياً مع حفظ المسودات</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="exam.html"><span class="menu-icon">📝</span><span class="menu-copy"><strong>محاكاة Goethe</strong><small>فتح المستويات بعد اجتياز ما قبلها</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="coach.html"><span class="menu-icon">🧭</span><span class="menu-copy"><strong>المدرب الشخصي</strong><small>خطة خفيفة ومراجعة متباعدة</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="progress.html"><span class="menu-icon">📈</span><span class="menu-copy"><strong>تقدمي</strong><small>اعرف ما أنجزته حتى الآن</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="account.html"><span class="menu-icon">☁️</span><span class="menu-copy"><strong>حسابي</strong><small>اسم مستخدم وكلمة مرور ومزامنة التقدم</small></span><span class="menu-chevron">›</span></a>
+        <a class="menu-entry" href="backup.html"><span class="menu-icon">💾</span><span class="menu-copy"><strong>حفظ التقدم</strong><small>تصدير واستعادة نسخة احتياطية</small></span><span class="menu-chevron">›</span></a>
+      </div>
+      <a href="#view" class="menu-jump">↓ الانتقال إلى مساحة التعلم</a>
+    </aside>
+    <div class="learning-workspace">
+      <div class="workspace-heading"><strong id="workspaceTitle">كلمات اليوم</strong><span>اتبع المسار خطوة بخطوة</span></div>
+  <section id="days" aria-label="أيام التعلم"></section>
+  <section id="view" aria-live="polite"></section>
+    </div>
+  </div>
+</main>
+<footer>تعلّم بهدوء، وراجع باستمرار، ولا تقلق من الأخطاء. 🇩🇪</footer>
+<script src="cloud-config.js"></script><script src="cloud-sync.js"></script><script src="data.js"></script>
+<script src="data-m3.js"></script>
+<script src="ui.js"></script>
+<script src="learning-path.js"></script>
+<script src="app.js"></script>
+<script src="pwa.js"></script></body>
+</html>

@@ -1,0 +1,7 @@
+V50 — content and active-recall conjugation
+* Added 102 explicit six-person present-tense paradigms for selected A1/A2/B1 verbs. Added independent table file conjugation-reviewed-v50.js.
+* Added an optional conjugation typing mode (Präsens) alongside existing multiple-choice quizzes.
+* Automatically falls back to meaning MCQ where a reviewed paradigm is unavailable; no unverified auto-generated form is used for objective grading.
+* Existing scores, keys, stage gates and completed days remain unchanged.
+* Added quick German special-character keys for typing drills; clarified that reflexive pronouns belong in the answer.
+* Validated in Chromium synthetic page and checked all JS and local page assets.

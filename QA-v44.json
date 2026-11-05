@@ -1,0 +1,28 @@
+{
+  "release": "V44",
+  "scope": "GitHub Pages static site plus optional Cloudflare Worker + D1 (not yet deployed)",
+  "html_pages_checked": 11,
+  "javascript_files_syntax_checked": 21,
+  "missing_local_links": [],
+  "missing_cached_assets": [],
+  "goethe_objective_questions": {
+    "A1": 28,
+    "A2": 28,
+    "B1": 28,
+    "total": 84
+  },
+  "tests_run": [
+    "V43 compatibility / smoke in Chromium (11 pages, mobile layouts)",
+    "V44 shared-browser account isolation, logout, expired session, explicit guest import in Chromium",
+    "V44 direct link learning locks, daily conjugation and skills in Chromium",
+    "V44 Goethe exams A1/A2/B1 started and finished, 28 questions, saved snapshots in Chromium",
+    "V44 Worker backend mocked with real SQLite: register/login/logout, password hashing, version conflict, CORS",
+    "V44 IP-wide and per-username rate limits with SQLite"
+  ],
+  "important_limits": [
+    "Cloudflare Worker/D1 not deployed or live-tested; cloud save not available until configured.",
+    "Audio is synthesized by browser speechSynthesis, not official Goethe recordings.",
+    "Irregular/heuristic conjugation tables still need full linguistic review.",
+    "Browser tests use local in-memory HTML mocks and are not a live GitHub Pages deployment."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "version": "V43",
+  "html_pages": 11,
+  "javascript_files_checked": 21,
+  "javascript_errors": [],
+  "missing_html_local_assets": [],
+  "browser_tests": "PASS: smoke 11 pages; account simulated 2-device synchronization; mobile 4 pages; gates direct Goethe, lesson, conjugation, skills",
+  "worker_tests": "PASS: register, salted-hash, login, duplicate username, bad password, version conflict, logout, CORS",
+  "cloud_live_status": "NOT_DEPLOYED: Cloudflare Worker and D1 must be published and configured",
+  "note": "Browser API tests use a mock Worker, not a real deployment."
+}

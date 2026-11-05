@@ -1,0 +1,7 @@
+V47 quality checks (November 5, 2026)
+- 45 practice tasks: 5 each for Listen, Speak, Write in A1/A2/B1; previous 3 task indices per mode preserved.
+- Speaking and writing are self-assessed, not official Goethe assessments. A1=12/A2=25/B1=45 word thresholds are internal study minimums, NOT Goethe requirements.
+- Playwright Chromium: 11 HTML pages load without JavaScript exceptions; wrong answer cannot unlock the next task; 5 listening items unlock speaking; speaking self-checks required; writing autosaves across rerender and reload; min words and self-checks gate writing; A2/B1 level lock checks; 4 mobile/desktop widths with no horizontal overflow.
+- Regression Chromium: A1/A2/B1 mock Goethe navigation/report; cloud sync rollback on quota failure; isolated guest profiles; direct-link locks.
+- 21 JS files plus backend Worker syntax verified with node --check, local HTML href/src dependencies checked, zip CRC integrity tested.
+- Important: cloud account service still requires deployment (Cloudflare Worker/D1 and configuration); no live production cloud backend has been tested. Browser speech synthesis may vary by device. Language accuracy of the entire 1,350-verb corpus remains unaudited.

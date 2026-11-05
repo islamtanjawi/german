@@ -1,0 +1,25 @@
+{
+  "release": "V45",
+  "javascript_files_syntax_checked": 21,
+  "html_pages_checked": 11,
+  "missing_local_references": [],
+  "verified_tests": [
+    "Shared browser guest/account profile isolation (Chromium)",
+    "Guest import only on explicit consent and registration (Chromium)",
+    "Account login when cloud synchronization fails (Chromium)",
+    "Immediate account privacy isolation when session is revoked (Chromium)",
+    "Reject revoked token at login rather than claim success (Chromium)",
+    "Progress sync across two simulated browsers (Chromium)",
+    "Direct-link locked lesson, conjugation and Goethe access checks (Chromium)",
+    "Full A1/A2/B1 Goethe exam flow with 28 questions each (Chromium)",
+    "Cloudflare Worker unit/integration logic with SQLite mock (Node.js)"
+  ],
+  "remaining_risks": [
+    "Cloudflare Worker/D1 not deployed, no real internet cross-device sync",
+    "1,165 verb entries still lack explicitly reviewed Präsens tables",
+    "Goethe audio uses speech synthesis not official recordings",
+    "Writing/speaking not automatically scored",
+    "Need live GitHub Pages mobile and offline verification",
+    "Original 73 task checklist not available for audited count"
+  ]
+}

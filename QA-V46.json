@@ -1,0 +1,30 @@
+{
+  "release": "V46",
+  "html": 11,
+  "javascript": 21,
+  "syntax_errors": [],
+  "missing_local_html_refs": [],
+  "browser_checks": [
+    "11 HTML pages loaded without script errors",
+    "A1/A2/B1 exam navigation and 34-question snapshots saved",
+    "Cloud sync one-off quota error caused rollback; retry successful",
+    "Login profile swap quota error retained guest progress",
+    "Direct-link level locks tested",
+    "Mobile layout tested at width 390px"
+  ],
+  "backend_checks": [
+    "register and password hashing",
+    "login and logout",
+    "optimistic progress version conflict",
+    "CORS and key validation",
+    "per-IP/per-account throttling"
+  ],
+  "verb_conjugation_sample_checks": 6,
+  "goethe_count": {
+    "A1": 34,
+    "A2": 34,
+    "B1": 34
+  },
+  "cloud_deployed": false,
+  "full_manual_linguistic_audit": false
+}

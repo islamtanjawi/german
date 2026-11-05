@@ -1,0 +1,2 @@
+V45: عند رفض الخادم جلسة منتهية، فصل تقدم الحساب عن الزائر وحفظ نسخة محلية قبل إزالة الجلسة. عند نجاح تسجيل الدخول وفشل المزامنة، توضح الصفحة حالة الحفظ المحلي دون الادعاء بالمزامنة. تحديث cache PWA. لم تُنشر الخدمة السحابية.
+V45 extra: reject revoked token at login instead of displaying misleading success; tested local-only login fallback, server revocation, existing account privacy, direct access locks, Goethe exams, and SQLite backend. ZIP files placed at archive root for direct GitHub Pages upload.

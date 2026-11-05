@@ -1,0 +1,40 @@
+{
+  "release": "V41",
+  "javascript_files_syntax_checked": 16,
+  "html_pages": 10,
+  "packaged_files": 77,
+  "zip_bytes": 163878,
+  "local_references_missing": 0,
+  "zip_integrity": "pass",
+  "in_memory_chromium": "10 page smoke tests; 3 exam scenarios; 15-question conjugation quiz; old-progress persistence; 4 responsive checks pass",
+  "real_http_service_worker_test": "not performed, localhost navigation blocked by environment",
+  "l10n_linguistic_audit": "incomplete",
+  "coverage": {
+    "reviewedTables": 139,
+    "irregularTables": 44,
+    "added": 98,
+    "byLevel": [
+      {
+        "level": "A1",
+        "entries": 450,
+        "reviewed": 111
+      },
+      {
+        "level": "A2",
+        "entries": 450,
+        "reviewed": 36
+      },
+      {
+        "level": "B1",
+        "entries": 450,
+        "reviewed": 38
+      }
+    ],
+    "covered": 185,
+    "notes": [
+      "Coverage counts only explicitly listed six-form Präsens tables (including irregular forms), not regular heuristic inflections.",
+      "No claim of all 1,350 verb entries being linguistically verified.",
+      "Automatically graded conjugation questions use explicit table entries only."
+    ]
+  }
+}

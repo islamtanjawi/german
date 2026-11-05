@@ -1,0 +1,1 @@
+Checks: node --check all JS; validate Goethe question counts/options in Chromium; test cloud profile swap under injected one-off localStorage write error; test cloud/guest isolation & lock checks; ZIP integrity/local relative link check. Confirm account sync not truly enabled until Cloudflare Worker deployed.

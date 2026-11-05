@@ -1,0 +1,22 @@
+{
+  "version": "V50",
+  "status": "development",
+  "new_explicit_present_tables": 102,
+  "curriculum_verbs": 1350,
+  "pages": 11,
+  "javascript_count": 21,
+  "js_errors": [],
+  "missing_assets": [],
+  "browser": "Chromium in-memory DOM injection (not full hosted navigation)",
+  "browser_checks": [
+    "all local pages execute without JS errors",
+    "no horizontal overflow on 390px viewport",
+    "typing quiz works and saves result",
+    "legacy completed day remains unlocked",
+    "typing German special-character button",
+    "tested viewport widths 360,375,768,1280 for conjugation"
+  ],
+  "github_pages_live_tested": false,
+  "cloudflare_live_tested": false,
+  "full_linguistic_audit": false
+}
