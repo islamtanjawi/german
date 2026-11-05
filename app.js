@@ -46,7 +46,17 @@ function quizView(){if(!st.quiz)buildQuiz();const qz=st.quiz;if(qz.finished){con
 function reviewView(){const items=extra.mistakes.map(getWord).filter(Boolean);if(!items.length){$('#view').innerHTML='<div class="empty-state"><div>🌟</div><h3>لا توجد كلمات تحتاج إلى مراجعة</h3><p>عندما تخطئ في اختبار، ستظهر الكلمة هنا لتراجعها لاحقاً.</p><button class="tool" data-tab="quiz">اذهب إلى الاختبار</button></div>';return}$('#view').innerHTML='<div class="section-head"><div><h3>الكلمات التي تحتاج إلى تثبيت</h3><p>راجع معناها، استمع إليها، ثم أزلها من القائمة عندما تتقنها.</p></div><span class="level-pill">'+items.length+' كلمات</span></div><div class="list">'+items.map(it=>'<article class="word-card"><span class="num">'+it.m.toString().padStart(2,'0')+'</span><div class="word-content"><div class="de">'+esc(it.word[0])+'</div><div class="ar">'+esc(it.word[1])+'</div><small class="muted">'+M[it.m].level+' · اليوم '+it.d+'</small></div><button class="icon-btn" data-say="'+esc(it.word[0])+'">🔊</button><button class="icon-btn learned-btn" data-remove-review="'+it.id+'" title="أتقنتها">✓</button></article>').join('')+'</div><div class="actions"><button class="primary" data-review-quiz>اختبر كلمات المراجعة</button><button class="tool" data-clear-review>مسح قائمة المراجعة</button></div>'}
 function view(){if(st.tab==='words')wordsView();else if(st.tab==='sent')sentencesView();else if(st.tab==='quiz')quizView();else reviewView()}
 function render(){if(!levelOpen(st.m)||!dayOpen(st.m,st.d)){const c=current();st.m=c.m;st.d=c.d;st.quiz=null}stats();months();head();dashboard();days();view();document.querySelectorAll('.tabs button').forEach(b=>{const chosen=b.dataset.tab===st.tab;b.classList.toggle('on',chosen);b.setAttribute('aria-selected',String(chosen))});const names={words:'كلمات اليوم',sent:'جمل شائعة',quiz:'اختبار الكلمات',review:'مراجعة الأخطاء'};const title=$('#workspaceTitle');if(title)title.textContent=names[st.tab]||'تعلمي'}
-function setTab(tab){st.tab=tab;st.quiz=null;st.hide=false;render()}
+function setTab(tab){
+ st.tab=tab;st.quiz=null;st.hide=false;render();
+ // Scroll only after a user has chosen a learning section, not on initial page load.
+ // Rendering above is synchronous; requestAnimationFrame waits for its layout.
+ requestAnimationFrame(()=>{
+  const target=document.getElementById('view');
+  if(!target)return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.scrollIntoView({behavior:reduce?'instant':'smooth',block:'start'});
+ });
+}
 document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;
  if(t.dataset.m!==undefined){const m=+t.dataset.m;if(!levelOpen(m)){lockMsg('level',m);return}st.m=m;st.d=1;st.quiz=null;render()}
  else if(t.dataset.d){const d=+t.dataset.d;if(!dayOpen(st.m,d)){lockMsg('day',d);return}st.d=d;st.quiz=null;render()}

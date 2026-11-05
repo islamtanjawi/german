@@ -81,3 +81,7 @@ body:has(.learning-shell) header,body:has(.learning-shell) main,body:has(.learni
 @media(min-width:900px){.learning-menu .menu-links{grid-template-columns:repeat(4,minmax(0,1fr))}.learning-menu .tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:580px){.learning-menu .tabs,.learning-menu .menu-links{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-menu .tabs .menu-entry,.learning-menu .menu-links .menu-entry{min-height:92px;padding:10px 8px;gap:7px}.learning-menu .menu-icon{width:32px;height:32px;flex-basis:32px;font-size:1rem}.learning-menu .menu-copy strong{font-size:.9rem}.learning-menu .menu-copy small{font-size:.72rem}.menu-chevron{display:none}}
 @media(max-width:360px){.learning-menu .tabs,.learning-menu .menu-links{grid-template-columns:1fr}}
+
+/* V53: automatically reveal chosen section without hiding the start beneath the viewport edge. */
+#view{scroll-margin-top:20px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
