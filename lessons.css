@@ -41,3 +41,21 @@
 .cloud-fresh-notice a{color:var(--acc,var(--accent));font-weight:800;margin-inline-start:7px}
 /* V43: prevent course navigation from overflowing narrow phone screens. */
 @media(max-width:850px){.topbar{height:auto;min-height:70px;display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:7px;padding:12px 15px}.topbar .brand{flex-basis:100%;margin-bottom:5px}.topbar>a:not(.brand){flex:0 1 auto;border:1px solid var(--line);border-radius:10px;padding:5px 8px;max-width:100%;font-size:.78rem}.topbar .cloud-account-link{background:var(--paper)}}
+
+
+/* V54: unified, comfortable navigation on lessons page. */
+.topbar{height:auto;min-height:78px;display:flex;flex-wrap:wrap;
+  align-items:center;justify-content:flex-start;gap:9px 11px;
+  padding:14px clamp(14px,3vw,25px);box-sizing:border-box}
+.topbar .brand{margin-inline-end:auto;flex-shrink:0}
+.topbar>a:not(.brand){display:inline-flex;align-items:center;justify-content:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;
+  min-height:41px;padding:8px 12px;color:var(--ink);text-decoration:none;
+  font-size:.84rem;font-weight:650;white-space:nowrap}
+.topbar>a:not(.brand):hover,.topbar>a:not(.brand):focus-visible{
+  background:var(--accent-soft);border-color:var(--accent)}
+@media(max-width:760px){
+  .topbar{gap:8px;padding:14px 13px;justify-content:flex-start}
+  .topbar .brand{flex-basis:100%;margin:0 0 4px}
+  .topbar>a:not(.brand){font-size:.8rem;min-height:42px}
+}
