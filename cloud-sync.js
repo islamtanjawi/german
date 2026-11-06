@@ -149,6 +149,8 @@ function boot(){nav();if(!enabled||!session())return;sync(false);setInterval(()=
 }
 function preflight(){if(session())return;const owner=localStorage.getItem(OWNER);if(owner&&owner!==GUEST){try{switchToGuest()}catch(e){setStatus('تعذّر فصل التقدم المحلي. احفظ نسخة احتياطية من بياناتك.')}}}
 preflight();
-window.AcademyCloud={configured:enabled,session,login,logout,sync,collect,hasGuestProgress,importGuestProgress,get status(){return status}};
+async function leaderboardConsent(){if(!enabled||!session())throw Error('سجّل الدخول أولاً.');return request('/leaderboard/consent')}
+async function setLeaderboardConsent(publiclyVisible){if(!enabled||!session())throw Error('سجّل الدخول أولاً.');return request('/leaderboard/consent',{method:'PUT',body:JSON.stringify({public:!!publiclyVisible})})}
+window.AcademyCloud={configured:enabled,session,login,logout,sync,collect,hasGuestProgress,importGuestProgress,leaderboardConsent,setLeaderboardConsent,get status(){return status}};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
