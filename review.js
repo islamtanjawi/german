@@ -14,6 +14,13 @@ root.querySelector('#reviewFilter').value=filter;
 }
 root.addEventListener('input',e=>{if(e.target.id==='reviewSearch'){const pos=e.target.selectionStart;query=e.target.value.toLowerCase().trim();draw();const el=root.querySelector('#reviewSearch');el.focus();el.setSelectionRange(pos,pos)}});
 root.addEventListener('change',e=>{if(e.target.id==='reviewFilter'){filter=e.target.value;draw()}});
-root.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;if(btn.dataset.speak!==undefined){if(!window.speechSynthesis)return window.UI?.toast('النطق غير متاح في هذا المتصفح');const u=new SpeechSynthesisUtterance(btn.dataset.speak);u.lang='de-DE';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}else if(btn.dataset.toggle!==undefined){const v=btn.dataset.toggle;review[v]=!review[v];if(!save())window.UI?.toast('تعذر حفظ المراجعة في المتصفح');draw()}});
+root.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;if(btn.dataset.speak!==undefined){if(!window.speechSynthesis)return window.UI?.toast('النطق غير متاح في هذا المتصفح');const u=new SpeechSynthesisUtterance(btn.dataset.speak);u.lang='de-DE';u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}else if(btn.dataset.toggle!==undefined){const v=btn.dataset.toggle;
+const had=Object.prototype.hasOwnProperty.call(review,v),previous=review[v];
+review[v]=!review[v];
+if(!save()){
+ if(had)review[v]=previous;else delete review[v];
+ window.UI?.toast('تعذر حفظ المراجعة؛ بقيت حالتها السابقة ولم يتغير تقدمك. حاول مجدداً.');
+}
+draw()}});
 draw();
 })();

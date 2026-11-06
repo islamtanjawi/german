@@ -16,8 +16,50 @@ if(!extra.dailyPass||typeof extra.dailyPass!=='object'||Array.isArray(extra.dail
   if(all)extra.dailyPass[m+'-'+d]=true;
  }});
 }
-const getWord=id=>{const p=id.split('-').map(Number),m=M[p[0]];return m&&m[p[2]==='v'?'verbs':'nouns'][((p[1]-1)*PER)+p[3]]?{id,m:p[0],d:p[1],type:p[2],index:p[3],word:m[p[2]==='v'?'verbs':'nouns'][((p[1]-1)*PER)+p[3]]}:null};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(prog));localStorage.setItem(EXTRA,JSON.stringify(extra))}catch(e){}}
+// Word IDs contain a letter (`v` for verbs, `n` for nouns). Never
+// Number() the type; doing so mapped verb review mistakes to unrelated nouns.
+const getWord=id=>{
+ const parts=String(id).split('-');
+ if(parts.length!==4||!['v','n'].includes(parts[2]))return null;
+ const [mi,di,kind,ii]=parts,m=Number(mi),d=Number(di),i=Number(ii);
+ if(!Number.isInteger(m)||m<0||m>=M.length||!Number.isInteger(d)||d<1||d>30||!Number.isInteger(i)||i<0||i>=PER)return null;
+ const arr=M[m][kind==='v'?'verbs':'nouns'];
+ const word=arr[(d-1)*PER+i];
+ return word?{id,m,d,type:kind,index:i,word}:null;
+};
+// Commit the two legacy progress records together as safely as localStorage allows.
+// Never report a newly unlocked stage when either write failed.
+function save(){
+ let oldProgress,oldExtra;
+ try{
+  oldProgress=localStorage.getItem(KEY);oldExtra=localStorage.getItem(EXTRA);
+  localStorage.setItem(KEY,JSON.stringify(prog));
+  localStorage.setItem(EXTRA,JSON.stringify(extra));
+  return true;
+ }catch(err){
+  // If the second write fails, roll the first back as well.
+  try{
+   if(oldProgress===null)localStorage.removeItem(KEY);
+   else if(oldProgress!==undefined)localStorage.setItem(KEY,oldProgress);
+   if(oldExtra===null)localStorage.removeItem(EXTRA);
+   else if(oldExtra!==undefined)localStorage.setItem(EXTRA,oldExtra);
+  }catch(rollbackError){
+   window.UI?.toast?.('تعذّر الحفظ والاسترجاع التلقائي. لا تغلق الصفحة؛ احفظ نسخة احتياطية من تقدمك.');
+   return false;
+  }
+  window.UI?.toast?.('تعذّر حفظ التقدم. تحقق من مساحة المتصفح ثم أعد المحاولة.');
+  return false;
+ }
+}
+function commitChange(change){
+ const oldProg=prog,oldExtra=extra;
+ // Create isolated copies so failed writes cannot silently unlock content in memory.
+ prog={...prog};
+ extra=JSON.parse(JSON.stringify(extra));
+ try{change();if(save())return true}catch(err){window.UI?.toast?.('تعذّر تحديث التقدم؛ أعد المحاولة.');}
+ prog=oldProg;extra=oldExtra;
+ return false;
+}
 const dayDone=(m,d)=>extra.dailyPass[m+'-'+d]===true&&['v','n'].every(t=>{for(let i=0;i<PER;i++)if(!prog[key(m,d,t,i)])return false;return true});
 function allWords(){let a=[];M.forEach((x,m)=>['v','n'].forEach(t=>x[t==='v'?'verbs':'nouns'].forEach((w,i)=>a.push({id:key(m,Math.floor(i/PER)+1,t,i%PER),word:w,level:x.level}))));return a}
 const WORDS=allWords();
@@ -32,7 +74,7 @@ function afterMark(was){if(!was&&dayDone(st.m,st.d)){say2('win',st.d<nDays(st.m)
 function speak(t){try{if(!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=.86;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function completedCount(){let a=0;M.forEach((x,m)=>{for(let d=1;d<=nDays(m);d++)if(dayDone(m,d))a++});return a}
 function learnedCount(){return Object.values(prog).filter(Boolean).length}
-function touchStudy(){const today=new Date().toLocaleDateString('en-CA');if(extra.lastStudy!==today){const yesterday=new Date(Date.now()-86400000).toLocaleDateString('en-CA');extra.streak=extra.lastStudy===yesterday?extra.streak+1:1;extra.lastStudy=today;}save()}
+function touchStudy(){const today=new Date().toLocaleDateString('en-CA');if(extra.lastStudy!==today){const yesterday=new Date(Date.now()-86400000).toLocaleDateString('en-CA');extra.streak=extra.lastStudy===yesterday?extra.streak+1:1;extra.lastStudy=today;}}
 function stats(){const done=completedCount(),total=M.reduce((s,x,m)=>s+nDays(m),0);$('#stat').textContent='أكملت '+done+' من '+total+' يوماً';$('#streak').textContent='🔥 '+extra.streak+' يوم متواصل';$('#review-count').textContent=extra.mistakes.length}
 function months(){$('#months').innerHTML=M.map((x,i)=>'<button aria-disabled="'+(!levelOpen(i))+'" data-m="'+i+'" class="'+(i===st.m?'on ':'')+(levelOpen(i)?'':'locked')+'"><b>'+x.level+'</b><span>المستوى '+(i+1)+'</span></button>').join('')}
 function head(){const x=M[st.m];$('#head').innerHTML='<div class="level-heading"><div><span class="eyebrow">مسارك التعليمي</span><h2>'+x.level+' — '+esc(x.title)+'</h2><p>اليوم '+st.d+' من 30 · تعلّم 15 فعلاً و15 اسماً.</p></div><span class="level-pill">'+x.level+'</span></div>'}
@@ -62,15 +104,15 @@ document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)r
  else if(t.dataset.d){const d=+t.dataset.d;if(!dayOpen(st.m,d)){lockMsg('day',d);return}st.d=d;st.quiz=null;render()}
  else if(t.dataset.tab){setTab(t.dataset.tab)}
  else if(t.dataset.say!==undefined){speak(t.dataset.say)}
- else if(t.dataset.ok){const id=t.dataset.ok,was=dayDone(st.m,st.d);prog[id]?delete prog[id]:prog[id]=1;touchStudy();render();afterMark(was)}
+ else if(t.dataset.ok){const id=t.dataset.ok,was=dayDone(st.m,st.d);if(commitChange(()=>{prog[id]?delete prog[id]:prog[id]=1;touchStudy()})){render();afterMark(was)}}
  else if('hide'in t.dataset){st.hide=!st.hide;view()}
- else if('all'in t.dataset){const was=dayDone(st.m,st.d);['v','n'].forEach(ty=>{for(let i=0;i<PER;i++)prog[key(st.m,st.d,ty,i)]=1});touchStudy();render();afterMark(was)}
+ else if('all'in t.dataset){const was=dayDone(st.m,st.d);if(commitChange(()=>{['v','n'].forEach(ty=>{for(let i=0;i<PER;i++)prog[key(st.m,st.d,ty,i)]=1});touchStudy()})){render();afterMark(was)}}
  else if('startQuiz'in t.dataset){setTab('quiz')}
- else if(t.dataset.answer!==undefined&&st.quiz&&!st.quiz.answered&&!st.quiz.finished){const q=st.quiz.questions[st.quiz.index];st.quiz.selected=t.dataset.answer;st.quiz.answered=true;if(t.dataset.answer===q.word[1]){st.quiz.score++;extra.mistakes=extra.mistakes.filter(id=>id!==q.id)}else if(!extra.mistakes.includes(q.id))extra.mistakes.push(q.id);save();quizView();stats()}
- else if('next'in t.dataset&&st.quiz&&st.quiz.answered&&!st.quiz.finished){if(st.quiz.index<st.quiz.questions.length-1){st.quiz.index++;st.quiz.answered=false;st.quiz.selected=null;quizView()}else{st.quiz.finished=true;extra.quizDone++;extra.best=Math.max(extra.best,st.quiz.score);if(st.quiz.score>=Math.ceil(st.quiz.questions.length*.8))extra.dailyPass[st.m+'-'+st.d]=true;touchStudy();save();render()}}
+ else if(t.dataset.answer!==undefined&&st.quiz&&!st.quiz.answered&&!st.quiz.finished){const q=st.quiz.questions[st.quiz.index],correct=t.dataset.answer===q.word[1];commitChange(()=>{if(correct)extra.mistakes=extra.mistakes.filter(id=>id!==q.id);else if(!extra.mistakes.includes(q.id))extra.mistakes.push(q.id)});st.quiz.selected=t.dataset.answer;st.quiz.answered=true;if(correct)st.quiz.score++;quizView();stats()}
+ else if('next'in t.dataset&&st.quiz&&st.quiz.answered&&!st.quiz.finished){if(st.quiz.index<st.quiz.questions.length-1){st.quiz.index++;st.quiz.answered=false;st.quiz.selected=null;quizView()}else{if(commitChange(()=>{extra.quizDone++;extra.best=Math.max(extra.best,st.quiz.score);if(st.quiz.score>=Math.ceil(st.quiz.questions.length*.8))extra.dailyPass[st.m+'-'+st.d]=true;touchStudy()})){st.quiz.finished=true;render()}else{quizView();stats()}}}
  else if('retry'in t.dataset){st.quiz=null;buildQuiz();quizView()}
- else if(t.dataset.removeReview){prog[t.dataset.removeReview]=1;extra.mistakes=extra.mistakes.filter(id=>id!==t.dataset.removeReview);touchStudy();render()}
- else if('clearReview'in t.dataset){extra.mistakes=[];save();render()}
+ else if(t.dataset.removeReview){if(commitChange(()=>{prog[t.dataset.removeReview]=1;extra.mistakes=extra.mistakes.filter(id=>id!==t.dataset.removeReview);touchStudy()}))render()}
+ else if('clearReview'in t.dataset){if(commitChange(()=>{extra.mistakes=[]}))render()}
  else if('reviewQuiz'in t.dataset){const items=extra.mistakes.map(getWord).filter(Boolean);if(items.length){const sample=items.sort(()=>Math.random()-.5).slice(0,10);const reviewQuiz={questions:sample.map(it=>{const wrong=WORDS.filter(w=>w.word[1]!==it.word[1]);return{word:it.word,id:it.id,opts:[it.word[1],...wrong.sort(()=>Math.random()-.5).slice(0,3).map(w=>w.word[1])].sort(()=>Math.random()-.5)}}),index:0,score:0,answered:false,selected:null,finished:false};setTab('quiz');st.quiz=reviewQuiz;quizView()}}
  });
 {const c=current();st.m=c.m;st.d=c.d}
