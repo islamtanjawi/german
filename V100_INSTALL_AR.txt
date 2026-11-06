@@ -1,0 +1,9 @@
+تركيب تحديث German Academy V100
+
+إذا رفعت V99: فك ضغط german-academy-v100-update-from-v99.zip. انسخ فقط lessons.js وlessons-advanced.js وexam.js وsw.js إلى مجلد german (Replace).
+إذا كان موقعك على V82 حتى V98: استخدم german-academy-v100-cumulative-from-v82.zip الذي يجمع تحديثات V83 إلى V100. انسخ ملفات JavaScript الثمانية.
+
+GitHub Desktop: Summary = German Academy V100 > Commit to main > Push origin.
+حدّث الموقع بعد النشر باستخدام Ctrl+Shift+R. الأقفال ستبقى مقفلة؛ لا تفتحها لاختبار المستوى التالي. لا تغير Cloudflare.
+
+ملاحظة: إن كان موقعك أقدم من V82، لا تستخدم الحزمة التراكمية الصغيرة بل يجب مراجعة توافق الملفات أولاً.
