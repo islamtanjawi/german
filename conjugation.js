@@ -162,11 +162,12 @@ Object.assign(verifiedPresent, {"erklären": ["erkläre", "erklärst", "erklärt
 
 // V50: explicitly enumerated six-person forms for common A1–B1 verbs.
 Object.assign(verifiedPresent,window.ACADEMY_REVIEWED_V50||{});
+Object.assign(verifiedPresent,window.ACADEMY_REVIEWED_V76||{});
 const past={sein:['war','gewesen','sein'],haben:['hatte','gehabt','haben'],werden:['wurde','geworden','sein'],gehen:['ging','gegangen','sein'],kommen:['kam','gekommen','sein'],sehen:['sah','gesehen','haben'],lesen:['las','gelesen','haben'],sprechen:['sprach','gesprochen','haben'],essen:['aß','gegessen','haben'],nehmen:['nahm','genommen','haben'],geben:['gab','gegeben','haben'],fahren:['fuhr','gefahren','sein'],schlafen:['schlief','geschlafen','haben'],laufen:['lief','gelaufen','sein'],wissen:['wusste','gewusst','haben'],können:['konnte','gekonnt','haben'],müssen:['musste','gemusst','haben'],wollen:['wollte','gewollt','haben'],dürfen:['durfte','gedurft','haben'],sollen:['sollte','gesollt','haben'],mögen:['mochte','gemocht','haben'],machen:['machte','gemacht','haben'],lernen:['lernte','gelernt','haben'],arbeiten:['arbeitete','gearbeitet','haben'],spielen:['spielte','gespielt','haben'],kaufen:['kaufte','gekauft','haben'],trinken:['trank','getrunken','haben'],schreiben:['schrieb','geschrieben','haben'],finden:['fand','gefunden','haben'],bleiben:['blieb','geblieben','sein'],denken:['dachte','gedacht','haben'],bringen:['brachte','gebracht','haben'],kennen:['kannte','gekannt','haben'],nennen:['nannte','genannt','haben'],stehen:['stand','gestanden','haben'],sitzen:['saß','gesessen','haben'],liegen:['lag','gelegen','haben'],helfen:['half','geholfen','haben'],treffen:['traf','getroffen','haben'],vergessen:['vergaß','vergessen','haben'],halten:['hielt','gehalten','haben'],tragen:['trug','getragen','haben'],lassen:['ließ','gelassen','haben'],beginnen:['begann','begonnen','haben'],gewinnen:['gewann','gewonnen','haben'],verlieren:['verlor','verloren','haben'],entscheiden:['entschied','entschieden','haben'],verstehen:['verstand','verstanden','haben'],bekommen:['bekam','bekommen','haben'],anrufen:['rief an','angerufen','haben'],aufstehen:['stand auf','aufgestanden','sein'],einkaufen:['kaufte ein','eingekauft','haben'],anfangen:['fing an','angefangen','haben'],einladen:['lud ein','eingeladen','haben'],mitnehmen:['nahm mit','mitgenommen','haben'],aussehen:['sah aus','ausgesehen','haben'],aufwachen:['wachte auf','aufgewacht','sein'],mitbringen:['brachte mit','mitgebracht','haben'],ankommen:['kam an','angekommen','sein'],ausgehen:['ging aus','ausgegangen','sein'],zurückkommen:['kam zurück','zurückgekommen','sein']};
 let state={done:{},errors:{},scores:{}};try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')state={...state,...s,done:s.done&&typeof s.done==='object'&&!Array.isArray(s.done)?s.done:{},errors:s.errors&&typeof s.errors==='object'&&!Array.isArray(s.errors)?s.errors:{},scores:s.scores&&typeof s.scores==='object'&&!Array.isArray(s.scores)?s.scores:{}}}catch(e){}
 let vocab={};try{vocab=JSON.parse(localStorage.getItem(PROGRESS))||{}}catch(e){}
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){return false}}
 const levelDone=m=>Array.from({length:30},(_,i)=>i+1).every(d=>state.done[`${m}-${d}`]===true);
 const levelOpen=m=>m===0||(levelDone(m-1)&&window.LearningPath.levelOpen(M[m].level));
 const dayOpen=(m,d)=>levelOpen(m)&&(d===1||state.done[`${m}-${d-1}`]===true);
@@ -217,12 +218,22 @@ function makeQuestion(w,i){
  return {w,i,kind:'meaning',correct:w[1],options:shuffle([w[1],...shuffle(alternatives).slice(0,3)]),typed:false};
 }
 function completeQuiz(){
- if(!quiz||quiz.index!==quiz.items.length-1||quiz.answer===null||quiz.saved)return;
- quiz.saved=true;
- const k=`${m}-${d}`;
- const old=Number(state.scores[k]);state.scores[k]=Math.max(Number.isFinite(old)?old:0,quiz.score);
- if(quiz.score>=Math.ceil(quiz.items.length*.8)){state.done[k]=true;window.UI?.play('win')}
- save();
+ // A successful quiz must not unlock a day until the browser confirms storage.
+ if(!quiz||quiz.saved||!quiz.finished&&(quiz.index!==quiz.items.length-1||quiz.answer===null))return;
+ quiz.finished=true;
+ const k=`${m}-${d}`,previousScore=state.scores[k],previousDone=state.done[k];
+ const old=Number(previousScore),pass=quiz.score>=Math.ceil(quiz.items.length*.8);
+ state.scores[k]=Math.max(Number.isFinite(old)?old:0,quiz.score);
+ if(pass)state.done[k]=true;
+ if(save()){
+   quiz.saved=true;quiz.saveFailed=false;
+   if(pass)window.UI?.play('win');
+ }else{
+   if(previousScore===undefined)delete state.scores[k];else state.scores[k]=previousScore;
+   if(previousDone===undefined)delete state.done[k];else state.done[k]=previousDone;
+   quiz.saveFailed=true;
+   window.UI?.toast?.('تعذر حفظ نتيجة التصريف. أفرغ مساحة التخزين ثم أعد المحاولة.');
+ }
 }
 function startQuiz(){if(!dayOpen(m,d)){lockNotice('اليوم مقفل');return}const a=info(m,d);quiz={items:shuffle(a.map((w,i)=>makeQuestion(w,i))),index:0,score:0,errors:[],answer:null,saved:false};render()}
 function normalizeTyped(s){return String(s??'').normalize('NFC').toLocaleLowerCase('de-DE').trim().replace(/\s+/g,' ')}
@@ -231,14 +242,14 @@ function submitQuizAnswer(answer){if(!quiz||quiz.answer!==null||quiz.index<0||qu
  const item=quiz.items[quiz.index],valid=item.typed?(typeof answer==='string'&&answer.trim().length>0):(Number.isInteger(answer)&&answer>=0&&answer<item.options.length);
  if(!valid)return;
  quiz.answer=answer;
- if(quizAnswerCorrect(item,answer)){quiz.score++;window.UI?.play('ok')}
+ if(quizAnswerCorrect(item,answer)){quiz.score++;if(state.errors[item.w[0]])delete state.errors[item.w[0]];window.UI?.play('ok')}
  else{quiz.errors.push(item.w);state.errors[item.w[0]]=(state.errors[item.w[0]]||0)+1;window.UI?.play('bad')}
  if(quiz.index===quiz.items.length-1)completeQuiz();else save();render();
 }
 function quizView(){
  const q=quiz;
  if(q.index>=q.items.length){const required=Math.ceil(q.items.length*.8),pass=q.score>=required;
-  return `<div class="quiz-panel"><span class="eyebrow">نتيجة الاختبار</span><h2>${pass?'🎉 أحسنت!':'🌱 واصل المراجعة'}</h2><div class="score">${q.score}/${q.items.length}</div><p>${pass?'اجتزت اختبار اليوم. تم حفظ نجاحك وفتح المرحلة التالية تلقائياً. اضغط العودة للمتابعة.':'تحتاج إلى '+required+' إجابة صحيحة على الأقل. راجع الأفعال وحاول مجدداً.'}</p>${q.errors.length?`<h3>أفعال للمراجعة</h3><div class="error-list">${q.errors.map(w=>`<span dir="ltr">${esc(w[0])} — ${esc(w[1])}</span>`).join('')}</div>`:''}<button id="endQuiz" class="primary">العودة إلى الأفعال</button></div>`;
+  return `<div class="quiz-panel"><span class="eyebrow">نتيجة الاختبار</span><h2>${pass?'🎉 أحسنت!':'🌱 واصل المراجعة'}</h2><div class="score">${q.score}/${q.items.length}</div><p>${q.saveFailed?'اكتمل الاختبار لكن تعذر حفظ النتيجة على جهازك. جرّب إخلاء مساحة التخزين ثم اضغط إعادة المحاولة.':pass?'اجتزت اختبار اليوم. تم حفظ نجاحك وفتح المرحلة التالية تلقائياً. اضغط العودة للمتابعة.':'تحتاج إلى '+required+' إجابة صحيحة على الأقل. راجع الأفعال وحاول مجدداً.'}</p>${q.errors.length?`<h3>أفعال للمراجعة</h3><div class="error-list">${q.errors.map(w=>`<span dir="ltr">${esc(w[0])} — ${esc(w[1])}</span>`).join('')}</div>`:''}${q.saveFailed?'<button id="retryQuizSave" class="primary">🔄 إعادة محاولة حفظ النتيجة</button>':''}<button id="endQuiz" class="primary">العودة إلى الأفعال</button></div>`;
  }
  const item=q.items[q.index],w=item.w,form=item.kind==='form',answered=q.answer!==null,correct=answered&&quizAnswerCorrect(item,q.answer);
  let content='';
@@ -249,7 +260,7 @@ function quizView(){
  }
  return `<div class="quiz-panel"><span class="eyebrow">اختبار اليوم ${d} · ${M[m].level}${item.typed?' · كتابة':''}</span><h2>${form?(item.typed?'اكتب التصريف الصحيح في المضارع':'اختر التصريف الصحيح في المضارع'):'ما معنى هذا الفعل؟'}</h2><div class="quiz-progress">السؤال ${q.index+1} من ${q.items.length} · النتيجة ${q.score}</div><div class="progress-track"><i style="width:${q.index/q.items.length*100}%"></i></div><h2 dir="ltr" class="quiz-word">${esc(w[0])}</h2>${form?`<p dir="ltr" class="quiz-pronoun">${esc(pron[item.person])} ______</p>`:''}${content}${answered?`<div class="feedback ${correct?'good':'bad'}" role="status">${correct?'إجابة صحيحة!':'الإجابة الصحيحة: '+esc(item.correct)}${form?`<p dir="ltr">${esc(pron[item.person].split('/')[0]+' '+item.correct)}</p>`:''}</div><button id="nextQuestion" class="primary">${q.index===q.items.length-1?'عرض النتيجة':'السؤال التالي ←'}</button>`:''}${quizMode==='typing'&&!item.typed&&!answered?'<p class="hint">هذا الفعل ليس له جدول مضارع مدقَّق، لذلك يظهر سؤال المعنى بدلاً من كتابة تصريف تخميني.</p>':''}</div>`;
 }
-function render(){if(!levelOpen(m)){m=0;d=1;quiz=null}if(!dayOpen(m,d)){d=1;quiz=null}selected=Math.min(selected,14);$('root').innerHTML=title()+levels()+days()+(quiz?quizView():dayView())+'<p class="footnote">تُحفظ نتائج الصرف والتحويل في هذا المتصفح. لا تُحذف بيانات الكلمات والدروس الموجودة.</p>'}
+function render(){if(!levelOpen(m)){m=0;d=1;quiz=null}if(!dayOpen(m,d)){d=1;quiz=null}selected=Math.min(selected,14);$('root').innerHTML=title()+levels()+days()+(quiz?quizView():dayView())+'<p class="footnote">تُحفظ نتائج التصريف على الجهاز وتُزامَن مع الحساب السحابي عند توفر الاتصال.</p>'}
 function lockNotice(t){if(window.UI){UI.play('lock');UI.toast(t)}else alert(t)}
 $('root').addEventListener('click',e=>{const b=e.target.closest('button,a');if(!b)return;
 if(b.dataset.level!==undefined){const i=Number(b.dataset.level);if(!Number.isInteger(i)||i<0||i>=M.length)return;if(!levelOpen(i)){lockNotice('🔒 أكمل أيام الصرف السابقة واجتز اختبارات المستوى السابق.');return}m=i;d=1;selected=0;quiz=null;render();return}
@@ -261,7 +272,8 @@ if(b.dataset.quizMode!==undefined&&!quiz){if(['choice','typing'].includes(b.data
 if(b.id==='beginQuiz'){startQuiz();return}
 if(b.dataset.answer!==undefined&&quiz&&quiz.answer===null){const chosen=Number(b.dataset.answer);if(!/^\d+$/.test(b.dataset.answer))return;submitQuizAnswer(chosen);return}
 if(b.id==='nextQuestion'&&quiz&&quiz.answer!==null){quiz.index=Math.min(quiz.items.length,quiz.index+1);quiz.answer=null;render();return}
-if(b.id==='endQuiz'){quiz=null;render();return}
+if(b.id==='retryQuizSave'&&quiz&&quiz.saveFailed){completeQuiz();render();return}
+if(b.id==='endQuiz'){if(quiz?.saveFailed&&!confirm('لم يتم حفظ نتيجة هذا الاختبار. هل تريد الخروج رغم ذلك؟'))return;quiz=null;render();return}
 });
 $('root').addEventListener('submit',e=>{if(e.target.id!=='typeForm')return;e.preventDefault();if(!quiz||quiz.answer!==null)return;const input=e.target.querySelector('#typedAnswer');if(input)submitQuizAnswer(input.value)});
 render();
