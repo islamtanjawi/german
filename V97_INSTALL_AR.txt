@@ -1,0 +1,6 @@
+طريقة تركيب V97:
+- إذا موقعك على V96: فك ضغط ملف update-from-v96 وانسخ exam.js وlessons.js وlessons-advanced.js وsw.js إلى مجلد german مع Replace.
+- إذا موقعك على أي إصدار V82–V95: استخدم ملف cumulative-from-v82 للانتقال مباشرة إلى V97.
+- GitHub Desktop: Summary = German Academy V97، ثم Commit to main وPush origin.
+- لا ترفع نسخة الموقع الكاملة فوق نسختك الحالية إلا إذا كنت تريد استبدال المشروع بالكامل.
+- لا تغيّر Cloudflare ولا المراحل المقفلة.

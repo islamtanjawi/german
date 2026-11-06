@@ -1,5 +1,5 @@
 /* Offline shell: cache only known public, static academy assets. Never cache account/API responses. */
-const CACHE='de-academy-release-96';
+const CACHE='de-academy-release-97';
 const ASSETS=['./','./index.html','./lessons.html','./conjugation.html','./practice.html','./exam.html','./coach.html','./backup.html','./account.html','./leaderboard.html','./leaderboard.js','./leaderboard.css','./welcome.js','./welcome.css','./account.css','./account.js','./cloud-config.js','./cloud-sync.js','./review.html','./review.js','./exam-review.html','./exam-review.js','./progress.html','./progress.js','./backup.js','./app.js','./ui.js','./learning-path.js','./data.js','./data-m3.js','./lessons.js','./lessons-advanced.js','./practice.js','./conjugation.js','./conjugation-reviewed-v50.js','./conjugation-reviewed-v76.js','./exam.js','./coach.js','./style.css','./lessons.css','./conjugation.css','./manifest.webmanifest','./icon.svg','./nav-highlight.js','./pwa.js'];
 const scope=new URL(self.registration.scope);
 const publicPaths=new Set(ASSETS.map(asset=>new URL(asset,scope).pathname));
