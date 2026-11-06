@@ -1,0 +1,5 @@
+تثبيت V96 على GitHub Pages:
+• إذا موقعك V95: استخدم التحديث الصغير V96.
+• إذا موقعك V82–V94: استخدم التحديث الموحد V96.
+• GitHub Desktop → Show in Explorer → انسخ الملفات المذكورة في ZIP إلى جذر german مع Replace → Commit to main → Push origin.
+• لا تمسح ملفات الموقع الأخرى؛ لا تغيّر Cloudflare؛ لا تفتح المراحل المقفلة.
