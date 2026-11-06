@@ -1,0 +1,6 @@
+تركيب V98 في GitHub Desktop:
+- إذا رفعت V97 بالفعل: استخدم ملف german-academy-v98-update-from-v97.zip؛ انسخ lessons-advanced.js وsw.js فقط مع Replace.
+- إذا الموقع على V82 إلى V96: استخدم german-academy-v98-cumulative-from-v82.zip، لأنه يجمع تحديثات V83–V98.
+- ثم GitHub Desktop: Summary: German Academy V98 — Commit to main — Push origin.
+- لا تستبدل مجلد Cloudflare أو قاعدة البيانات، ولا تفتح المراحل المقفلة.
+- لا ترفع جميع ملفات نسخة Full إلا إذا كنت تنوي استبدال الموقع بالكامل.

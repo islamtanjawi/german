@@ -1,0 +1,10 @@
+V98 — تدقيق قواعد الضمائر في A2
+
+1. تصحيح خطأ في ترتيب المفعولين بدرس A2-13: إذا كان المفعولان ضميرين، فالأصل Akkusativ قبل Dativ (Ich gebe es ihm).
+2. توضيح ثلاث حالات في جدول واحد: اسمان (Dativ ثم Akkusativ)، ضمير واسم (الضمير غالباً أولاً)، ضميران (Akkusativ ثم Dativ).
+3. إكمال جدول ضمائر Akkusativ بإضافة sie للجمع وSie الرسمية، دون تغيير تمارين الدرس أو شروط النجاح.
+4. تحديث ذاكرة التخزين المؤقت إلى V98.
+
+دليل لغوي: Institut für Deutsche Sprache — Pronominale Abfolgen https://grammis.ids-mannheim.de/systematische-grammatik/762
+
+لم نغيّر: الحسابات، Cloudflare، لوحة المتصدرين، الحفظ، أقفال المراحل، هوية الدروس، إجابات الاختبارات.
