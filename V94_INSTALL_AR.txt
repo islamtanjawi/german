@@ -1,0 +1,8 @@
+طريقة تحديث الأكاديمية إلى V94:
+إذا كان موقعك على V93 بالفعل، استخدم V94-update-from-v93.zip (ملفان فقط).
+إذا كان على V82–V92، استخدم ملف التحديث الموحد V94-cumulative-from-v82.zip.
+1) فك ضغط ZIP.
+2) GitHub Desktop: اختر german ثم Show in Explorer.
+3) انسخ ملفات .js الموجودة داخل ZIP إلى جذر مجلد german مع Replace.
+4) Summary: German Academy V94؛ اضغط Commit to main ثم Push origin.
+5) لا تغيّر Cloudflare ولا تعطل أقفال المراحل.

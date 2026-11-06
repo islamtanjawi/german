@@ -1,0 +1,23 @@
+German Academy V94 — تدقيق المضارع A1–B1
+
+- إضافة 100 جدول صريح (6 ضمائر): 34 في A1، 40 في A2، 26 في B1.
+- استثناء تعليمي مهم: «geschehen» بمعنى يحدث/يقع يُستعمل في الجدول القياسي مع الغائب:
+  es geschieht / sie geschehen. لا نخترع له 6 صيغ شخصية.
+- تمرين «passieren» بمعنى يحدث يطلب es فقط، لا ich passiere بمعنى مختلف.
+- توضيح فرق erschrecken (أفزع أنا) / jemanden erschrecken (أُخيف شخصاً)،
+  وتوضيح صيغ backen البديلة وwehtun.
+- الحالات الانعكاسية تحتفظ بضمائرها، ولم تتغير أقفال المراحل أو قاعدة البيانات أو الحسابات.
+
+تغطية الجداول الصريحة بعد V94: A1=449/450، A2=273/450، B1=277/450.
+الإجمالي=999/1350 (تبقى 351 مدخلاً بلا جدول كامل).
+ملاحظة: رقم التغطية ليس شهادة تدقيق لغوي مستقل لكل مثال أو ترجمة.
+
+مراجع مختارة:
+https://www.duden.de/konjugation/geschehen
+https://www.duden.de/konjugation/wehtun
+https://www.duden.de/konjugation/erschrecken_selbst
+https://www.duden.de/konjugation/erschrecken_einschuechtern_bedrohen
+https://www.duden.de/konjugation/backen_herstellen
+https://www.duden.de/konjugation/enthalten
+https://www.duden.de/konjugation/unterstreichen
+https://www.duden.de/konjugation/verfahren_verirren_verbrauchen_handeln
