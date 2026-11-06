@@ -1,0 +1,7 @@
+تركيب German Academy V99 باستخدام GitHub Desktop
+
+إذا رفعت V98: حمّل german-academy-v99-update-from-v98.zip، ثم انسخ lessons.js وlessons-advanced.js وsw.js إلى مجلد german مع Replace.
+إذا بقي موقعك على أي إصدار V82 إلى V97: استخدم german-academy-v99-cumulative-from-v82.zip؛ هذا ملف واحد يحتوي أيضاً على تحديثات V83–V98.
+افتح GitHub Desktop > Summary: German Academy V99 > Commit to main > Push origin.
+لا تغيّر ملفات Cloudflare أو قاعدة البيانات، ولا تُلغِ أقفال المراحل.
+نسخة Full متاحة للنسخ الاحتياطي فقط ولا حاجة إلى استبدال الموقع كاملاً.
