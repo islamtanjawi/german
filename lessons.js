@@ -84,15 +84,21 @@ function submitExam(){
  ex.submitted=true;ex.saved=false;ex.saveFailed=false;
  persistCourseExam();renderExam();
 }
-// V101: bring newly opened lesson content into view on desktop and mobile.
-// Respect reduced-motion preferences and wait until the panel has been rendered.
+// V102: reliable desktop navigation to the lesson content below the index.
+// Explicitly scroll the document rather than relying on scrollIntoView alone;
+// some browser/layout combinations target the wrong scrolling container.
 function scrollToLessonPanel(){
- const panel=$('#lessonPanel');
+ const panel=document.getElementById('lessonPanel');
  if(!panel)return;
- const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
- window.requestAnimationFrame(()=>{
-  panel.scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'start'});
- });
+ const reducedMotion=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const move=()=>{
+  const topbar=document.querySelector('.topbar');
+  const barHeight=topbar && getComputedStyle(topbar).position==='fixed' ? topbar.getBoundingClientRect().height : 0;
+  const y=Math.max(0, Math.round(panel.getBoundingClientRect().top + window.scrollY - barHeight - 12));
+  window.scrollTo({top:y,behavior:reducedMotion?'auto':'smooth'});
+ };
+ // On the next paint the rendered panel has its final position.
+ window.requestAnimationFrame(()=>window.requestAnimationFrame(move));
 }
 function openLesson(id){const l=LESSONS.find(x=>x.id===id);if(!l)return;if(!PATH.lessonOpen(l,LESSONS)){window.UI?.toast(!PATH.levelOpen(l.level)?PATH.reason(l.level):'🔒 أكمل الدرس السابق واجتز تمارينه أولاً');return}active=id;renderLesson();scrollToLessonPanel();}
 $('#lessonList').addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openLesson(b.dataset.open)});
