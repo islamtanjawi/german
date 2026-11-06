@@ -1,0 +1,25 @@
+German Academy V92 — تعزيز تغطية التصريفات في جميع المستويات
+
+أضفنا 100 جدول مضارع Präsens جديدة، بستة ضمائر، لأفعال موجودة أصلاً بالمنهج:
+A1: 30 جدولاً | A2: 35 جدولاً | B1: 35 جدولاً.
+
+ملاحظات تعليمية:
+- الانفصال: anschließen -> ich schließe an, hochfahren -> du fährst hoch, übereinstimmen -> wir stimmen überein.
+- الانعكاس: sich sonnen -> ich sonne mich, sich trauen -> du traust dich.
+- صيغ -eln و-ern: ich angle, ich klettere, ich schmeichle، مع مقابلات الضمائر الستة.
+- بعض الأفعال قد تتيح صيغاً بديلة صحيحة (مثلاً ich streichle/streichele)، ولذلك لا ندعي أن كل صيغة هي الوحيدة المقبولة.
+- الأفعال غير المكتملة تظل خارج أسئلة التصريف المصححة آلياً ما لم يكن لها جدول موثوق.
+
+إحصاء التغطية حسب الجداول المضمّنة، وليس دقة المحتوى اللغوية كاملة:
+A1: 392/450 | A2: 195/450 | B1: 211/450 | المجموع 798/1350 | المتبقي 552.
+
+لم تُعدّل شروط فتح المراحل أو ملفات Cloudflare أو تسجيل الدخول أو لوحة المتصدرين.
+ما زال التدقيق اللغوي الشامل والترجمات والامتحانات والاختبار بعد النشر مطلوباً.
+
+مراجع تحقّق لصيغ مختارة:
+https://www.duden.de/konjugation/hochfahren
+https://www.duden.de/konjugation/anschlieszen
+https://www.duden.de/konjugation/uebereinstimmen
+https://www.duden.de/konjugation/klettern
+https://www.duden.de/konjugation/streicheln
+https://www.duden.de/konjugation/ausstellen

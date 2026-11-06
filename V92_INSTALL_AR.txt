@@ -1,0 +1,8 @@
+لتثبيت V92 فوق V91:
+1- فك ضغط تحديث V92 الصغير.
+2- افتح GitHub Desktop ثم german ثم Show in Explorer.
+3- انسخ conjugation.js وsw.js إلى جذر مجلد german واختر Replace.
+4- Summary: German Academy V92، ثم Commit to main وبعدها Push origin.
+5- لا تغيّر Cloudflare ولا تفتح الأقفال.
+
+إذا لم تكن رفعت V91، استعمل حزمة V92 الموحدة (V82 إلى V91) بدلاً من التحديث الصغير.
