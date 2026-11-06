@@ -107,8 +107,16 @@ async function logout(){
  return {synced,revoked};
 }
 async function sync(manual=false){if(!enabled||!session())return {synced:false,reason:'not_configured_or_signed_out'};
- if(busy)return busy;
+ if(busy){
+  // A manual save may contain progress added AFTER the in-flight sync took its snapshot.
+  // Wait for it to finish, then perform a fresh pass before reporting success.
+  // Automatic triggers can share the existing request without starting another one.
+  return manual ? busy.catch(()=>{}).then(()=>sync(true)) : busy;
+ }
  busy=(async()=>{
+  // Capture the session that owns this request. A delayed error from an old
+  // account must never sign out or change the status of a newly logged-in one.
+  const startedToken=session()?.token;
   try{
    const s=session();await request('/me');if(session()?.token!==s.token)return {synced:false};let changed=false,uploaded=false;
    for(let attempts=0;attempts<4;attempts++){
@@ -121,11 +129,26 @@ async function sync(manual=false){if(!enabled||!session())return {synced:false,r
     }
     try{
      const result=await request('/progress',{method:'PUT',body:JSON.stringify({version:cloud.version,records:next})});
-     uploaded=true;localStorage.setItem(SNAP,JSON.stringify({username:s.username,version:result.version,records:next}));setStatus('تم حفظ التقدم على الحساب');
+     if(session()?.token!==s.token)return {synced:false,reason:'session_changed'};
+     uploaded=true;localStorage.setItem(SNAP,JSON.stringify({username:s.username,version:result.version,records:next}));
+     // A lesson/placement result may be saved while the PUT request is in flight.
+     // Do not claim the newest progress is in the cloud until a subsequent pass uploads it.
+     if(!sameRecords(collect(),next)){
+      if(attempts<3)continue;
+      setStatus('تغييرات أحدث محفوظة على الجهاز وتنتظر المزامنة.');
+      return {synced:false,changed,uploaded,pending:true};
+     }
+     setStatus('تم حفظ التقدم على الحساب');
      if(changed)freshNotice();return {synced:true,changed,uploaded};
     }catch(err){if(err.code!=='conflict'||attempts===3)throw err}
    }
-  }catch(err){if(err.code==='unauthorized'){switchToGuest();localStorage.removeItem(SESSION);localStorage.removeItem(SNAP);freshNotice()}setStatus(err.message);if(manual)throw err;return {synced:false,error:err.message}}
+  }catch(err){
+   if(session()?.token!==startedToken)return {synced:false,reason:'session_changed'};
+   if(err.code==='unauthorized'){switchToGuest();localStorage.removeItem(SESSION);localStorage.removeItem(SNAP);freshNotice()}
+   setStatus(err.message);
+   if(manual)throw err;
+   return {synced:false,error:err.message};
+  }
  })().finally(()=>{busy=null});return busy
 }
 function hasGuestProgress(){return Object.keys(readProfile(GUEST_PROFILE)).length>0}

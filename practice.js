@@ -103,16 +103,47 @@ let voiceRecorder=null,voiceStream=null,voiceChunks=[],voiceUrl=null;
 let voiceMimeType="";
 let voicePermissionPending=false;
 let voiceRequestVersion=0;
+let meterContext=null,meterAnalyser=null,meterFrame=0,meterData=null;
+function stopVoiceMeter(){
+ if(meterFrame){cancelAnimationFrame(meterFrame);meterFrame=0}
+ meterAnalyser=null;meterData=null;
+ if(meterContext){const old=meterContext;meterContext=null;old.close().catch(()=>{})}
+ const area=$('#voiceMeter');if(area){area.value=0;area.hidden=true}
+ const label=$('#voiceMeterLabel');if(label)label.hidden=true
+}
+function startVoiceMeter(stream){
+ stopVoiceMeter();
+ const AC=window.AudioContext||window.webkitAudioContext;
+ const bar=$('#voiceMeter');
+ if(!AC||!bar)return;
+ try{
+  const ctx=new AC();meterContext=ctx;
+  const source=ctx.createMediaStreamSource(stream);
+  const analyser=ctx.createAnalyser();analyser.fftSize=512;
+  source.connect(analyser);meterAnalyser=analyser;
+  meterData=new Uint8Array(analyser.fftSize);
+  bar.hidden=false;const label=$('#voiceMeterLabel');if(label)label.hidden=false;
+  const draw=()=>{
+   if(meterContext!==ctx||voiceRecorder?.state!=='recording')return;
+   analyser.getByteTimeDomainData(meterData);
+   let sum=0;for(const x of meterData){const v=(x-128)/128;sum+=v*v}
+   const rms=Math.sqrt(sum/meterData.length);
+   bar.value=Math.min(100,Math.round(rms*360));
+   meterFrame=requestAnimationFrame(draw);
+  };
+  meterFrame=requestAnimationFrame(draw);
+ }catch{stopVoiceMeter()}
+}
 function voiceStatus(message){const el=$('#voiceStatus');if(el)el.textContent=message}
 function releaseVoiceStream(){if(voiceStream){voiceStream.getTracks().forEach(track=>track.stop());voiceStream=null}}
 function clearVoice(){
  voiceRequestVersion++;
  if(voiceRecorder&&voiceRecorder.state!=='inactive'){voiceRecorder.onstop=null;try{voiceRecorder.stop()}catch{}}
- voiceRecorder=null;releaseVoiceStream();voiceChunks=[];voiceMimeType="";
+ stopVoiceMeter();voiceRecorder=null;releaseVoiceStream();voiceChunks=[];voiceMimeType="";
  if(voiceUrl){URL.revokeObjectURL(voiceUrl);voiceUrl=null}
 }
 async function toggleVoiceRecording(){
- if(voiceRecorder&&voiceRecorder.state==='recording'){voiceStatus('جارٍ تجهيز التسجيل…');voiceRecorder.stop();return}
+ if(voiceRecorder&&voiceRecorder.state==='recording'){voiceStatus('جارٍ تجهيز التسجيل…');stopVoiceMeter();voiceRecorder.stop();return}
  if(voicePermissionPending)return;
  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){voiceStatus('التسجيل الصوتي غير مدعوم في هذا المتصفح.');return}
  if(!window.isSecureContext){voiceStatus('يحتاج التسجيل إلى HTTPS أو localhost.');return}
@@ -125,9 +156,9 @@ async function toggleVoiceRecording(){
   clearVoice();voiceStream=stream;voiceChunks=[];
   const recorder=new MediaRecorder(stream);voiceRecorder=recorder;
   recorder.ondataavailable=e=>{if(e.data?.size)voiceChunks.push(e.data)};
-  recorder.onerror=()=>{voiceStatus('حدث خطأ أثناء التسجيل.');releaseVoiceStream()};
+  recorder.onerror=()=>{stopVoiceMeter();voiceStatus('حدث خطأ أثناء التسجيل.');releaseVoiceStream()};
   recorder.onstop=()=>{
-   releaseVoiceStream();if(voiceRecorder!==recorder)return;
+   stopVoiceMeter();releaseVoiceStream();if(voiceRecorder!==recorder)return;
    const blob=new Blob(voiceChunks,{type:recorder.mimeType||'audio/webm'});
    voiceMimeType=blob.type;
    if(blob.size&&mode==='speak'&&level===targetLevel&&idx===targetIdx){
@@ -138,9 +169,9 @@ async function toggleVoiceRecording(){
    }else voiceStatus('لم يتم حفظ تسجيل صوتي. حاول مرة أخرى.');
    voiceChunks=[];voiceRecorder=null;const button=$('#recordVoice');if(button){button.disabled=false;button.textContent='🎙️ تسجيل جديد'};
   };
-  recorder.start();voiceStatus('● جارٍ تسجيل صوتك… اضغط إيقاف التسجيل عند الانتهاء.');
+  recorder.start();startVoiceMeter(stream);voiceStatus('● جارٍ تسجيل صوتك… راقب مؤشر الصوت ثم اضغط إيقاف التسجيل عند الانتهاء.');
   if(btn){btn.disabled=false;btn.textContent='⏹️ إيقاف التسجيل'}
- }catch(err){releaseVoiceStream();voiceStatus(err?.name==='NotAllowedError'?'تم رفض إذن الميكروفون. فعّله من إعدادات المتصفح.':'تعذر بدء التسجيل الصوتي.')}
+ }catch(err){stopVoiceMeter();releaseVoiceStream();voiceStatus(err?.name==='NotAllowedError'?'تم رفض إذن الميكروفون. فعّله من إعدادات المتصفح.':'تعذر بدء التسجيل الصوتي.')}
  finally{voicePermissionPending=false;if(btn?.isConnected)btn.disabled=false}
 }
 
@@ -161,7 +192,7 @@ function render(){
   h+=`<h2>استمع جيداً إلى الجملة</h2><p class="small">هذا نطق آلي من المتصفح وليس تسجيلاً رسمياً. حاول الإجابة دون قراءة النص.</p><div class="actions"><button data-listen>🔊 تشغيل النطق الألماني</button><button data-toggle>${showText?'إخفاء النص':'إظهار النص والترجمة'}</button></div>${showText?`<div class="scenario"><div dir="ltr">${esc(t.de)}</div><p>${esc(t.ar)}</p></div>`:''}<h3>${esc(t.q)}</h3><div class="quiz-options">${options.map((o,i)=>`<button data-option="${i}" ${answered!==null?'disabled':''} class="${answered!==null?(i===correctIndex?'right':i===answered?'wrong':''):''}">${esc(o.text)}</button>`).join('')}</div>`;
   if(answered!==null)h+=`<div class="feedback ${answered===correctIndex?'good':'bad'}" role="status"><strong>${answered===correctIndex?'✓ إجابة صحيحة!':'✗ الإجابة غير صحيحة، جرّب مجدداً.'}</strong><p>الإجابة الصحيحة: <strong dir="auto">${esc(options[correctIndex].text)}</strong></p><p>${esc(t.note||t.ar)}</p><details><summary>راجع الجملة الألمانية والترجمة</summary><p dir="ltr">${esc(t.de)}</p><p>${esc(t.ar)}</p></details></div>${answered!==correctIndex?'<button id="retryListen">🔁 إعادة المحاولة</button>':''}`;
  }else if(mode==='speak'){
-  h+=`<h2>موقف محادثة</h2><div class="scenario">${esc(t.scenario)}</div><p>تحدث بصوت واضح ثم استمع إلى نموذج للتعبير. قارن بنفسك؛ الموقع لا يقيّم النطق آلياً.</p><div class="actions"><button data-listen>🔊 الاستماع إلى النموذج</button><button data-mic>🎙️ التعرف على الكلام (اختياري)</button><button data-toggle>${showText?'إخفاء النموذج':'إظهار النموذج'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.sample)}</div>`:''}<section class="voice-panel" aria-label="مساحة تسجيل الصوت"><h3>🎙️ تسجيل صوتك</h3><p class="small">سجّل إجابتك واستمع إليها هنا. التسجيل مؤقت على جهازك ولا يُرفع إلى الخادم، وسيُحذف عند تغيير التدريب أو مغادرة الصفحة.</p><div class="actions"><button type="button" id="recordVoice">🎙️ ابدأ التسجيل</button><button type="button" id="deleteVoice">🗑️ حذف التسجيل</button><button type="button" id="downloadVoice" hidden>⬇️ حفظ صوتي</button></div><p id="voiceStatus" role="status" aria-live="polite">اضغط ابدأ التسجيل ثم تحدث بالألمانية.</p><audio id="voicePlayback" controls hidden aria-label="استمع إلى تسجيل صوتك"></audio></section>${transcript?`<p>النص الذي تعرف عليه الجهاز: <span dir="ltr">${esc(transcript)}</span></p>`:''}<fieldset class="self-check"><legend>تقييم ذاتي قبل المتابعة</legend><label><input type="checkbox" data-speak-check="task" ${speakChecks.task?'checked':''}> تحدثت عن عناصر الموقف المطلوبة</label><label><input type="checkbox" data-speak-check="pronunciation" ${speakChecks.pronunciation?'checked':''}> استمعت إلى النموذج وأعدت المحاولة عند الحاجة</label></fieldset><button id="markSpeak" class="primary">${completed(level,'speak',idx)?'✓ مكتمل — يمكنك الانتقال':'تأكيد إنجاز المحادثة'}</button>`;
+  h+=`<h2>موقف محادثة</h2><div class="scenario">${esc(t.scenario)}</div><p>تحدث بصوت واضح ثم استمع إلى نموذج للتعبير. قارن بنفسك؛ الموقع لا يقيّم النطق آلياً.</p><div class="actions"><button data-listen>🔊 الاستماع إلى النموذج</button><button data-mic>🎙️ التعرف على الكلام (اختياري)</button><button data-toggle>${showText?'إخفاء النموذج':'إظهار النموذج'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.sample)}</div>`:''}<section class="voice-panel" aria-label="مساحة تسجيل الصوت"><h3>🎙️ تسجيل صوتك</h3><p class="small">سجّل إجابتك واستمع إليها هنا. التسجيل مؤقت على جهازك ولا يُرفع إلى الخادم، وسيُحذف عند تغيير التدريب أو مغادرة الصفحة.</p><div class="actions"><button type="button" id="recordVoice">🎙️ ابدأ التسجيل</button><button type="button" id="deleteVoice">🗑️ حذف التسجيل</button><button type="button" id="downloadVoice" hidden>⬇️ حفظ صوتي</button></div><p id="voiceStatus" role="status" aria-live="polite">اضغط ابدأ التسجيل ثم تحدث بالألمانية.</p><label class="small" id="voiceMeterLabel" for="voiceMeter" hidden>مؤشر قوة صوت الميكروفون (ليس تقييماً للنطق)</label><meter id="voiceMeter" min="0" max="100" value="0" hidden aria-label="مستوى صوت الميكروفون"></meter><audio id="voicePlayback" controls hidden aria-label="استمع إلى تسجيل صوتك"></audio></section>${transcript?`<p>النص الذي تعرف عليه الجهاز: <span dir="ltr">${esc(transcript)}</span></p>`:''}<fieldset class="self-check"><legend>تقييم ذاتي قبل المتابعة</legend><label><input type="checkbox" data-speak-check="task" ${speakChecks.task?'checked':''}> تحدثت عن عناصر الموقف المطلوبة</label><label><input type="checkbox" data-speak-check="pronunciation" ${speakChecks.pronunciation?'checked':''}> استمعت إلى النموذج وأعدت المحاولة عند الحاجة</label></fieldset><button id="markSpeak" class="primary">${completed(level,'speak',idx)?'✓ مكتمل — يمكنك الانتقال':'تأكيد إنجاز المحادثة'}</button>`;
  }else{
   const draft=typeof saved[k]==='string'?saved[k]:'';const count=wordCount(draft),target=wordsNeeded(level);
   h+=`<h2>تدريب الكتابة</h2><div class="scenario">${esc(t.write)}</div><p class="small">الحد الأدنى لهذه الممارسة: ${target} كلمة (ليس معيار Goethe الرسمي).</p><label for="draft">إجابتك بالألمانية</label><textarea id="draft" dir="ltr" maxlength="3000" placeholder="Schreibe hier auf Deutsch...">${esc(draft)}</textarea><div class="progress-row"><span id="wordCount" aria-live="polite">${count} / ${target} كلمة</span><span id="draftState">تُحفظ المسودة أثناء الكتابة على جهازك</span></div><fieldset class="self-check"><legend>تأكد من عملك بنفسك</legend><label><input type="checkbox" data-write-check="content" ${writeChecks.content?'checked':''}> تناولت جميع عناصر المهمة</label><label><input type="checkbox" data-write-check="review" ${writeChecks.review?'checked':''}> راجعت ترتيب الجملة والإملاء وعلامات الترقيم</label></fieldset><div class="actions"><button id="saveDraft" class="primary">${completed(level,'write',idx)?'✓ حفظ النص المحدّث':'حفظ وإنهاء التدريب'}</button><button data-toggle>${showText?'إخفاء المثال':'عرض مثال للمساعدة'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.writeSample)}</div>`:''}<p class="small">لا يُصحح الموقع الكتابة آلياً. اطلب من مدرس مراجعتها عندما تستطيع.</p>`;
@@ -175,7 +206,8 @@ function render(){
   if(voiceUrl&&player){player.src=voiceUrl;player.hidden=false;if(download)download.hidden=false;voiceStatus('✓ تسجيلك جاهز. يمكنك الاستماع إليه أو حفظه.');}
   if(voiceRecorder?.state==='recording'){
    if(record)record.textContent='⏹️ إيقاف التسجيل';
-   voiceStatus('● جارٍ تسجيل صوتك… اضغط إيقاف التسجيل عند الانتهاء.');
+   voiceStatus('● جارٍ تسجيل صوتك… راقب مؤشر الصوت ثم اضغط إيقاف التسجيل عند الانتهاء.');
+   if(voiceStream)startVoiceMeter(voiceStream);
   }
  }
 }
