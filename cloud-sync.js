@@ -124,6 +124,13 @@ async function sync(manual=false){if(!enabled||!session())return {synced:false,r
     const next=merged(base,local,validRecords(cloud.records));
     const applyChanged=applyRecords(next);changed=changed||applyChanged;
     if(sameRecords(next,safeObj(cloud.records))){
+     // Another tab or an event handler can save newer work after we collected
+     // the snapshot. Never report cloud success without checking again.
+     if(!sameRecords(collect(),next)){
+      if(attempts<3)continue;
+      setStatus('تغييرات أحدث محفوظة على الجهاز وتنتظر المزامنة.');
+      return {synced:false,changed,uploaded,pending:true};
+     }
      localStorage.setItem(SNAP,JSON.stringify({username:s.username,version:cloud.version,records:next}));setStatus('آخر مزامنة ناجحة');
      if(changed)freshNotice();return {synced:true,changed,uploaded};
     }

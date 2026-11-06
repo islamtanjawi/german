@@ -1,2 +1,11 @@
 /* V104 placement experience uses the existing lessons palette */
 #placementRoot{min-height:0;max-width:900px;margin:auto}#placementRoot h1{margin-top:0}#placementRoot p{color:var(--muted)}.placement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:25px 0}.placement-grid section,.placement-question,.placement-result{border:1px solid var(--line);background:var(--bg);padding:18px;border-radius:14px;margin-bottom:14px}.placement-grid h2,.placement-question h2{font-size:1.1rem}.placement-options{display:flex;gap:9px;flex-wrap:wrap}.placement-grid button,.placement-options button,.placement-submit,#placementRoot [data-home]{border:1px solid var(--accent);background:var(--paper);color:var(--ink);border-radius:10px;padding:9px 16px;cursor:pointer;font:inherit}.placement-grid button,.placement-submit{background:var(--accent);color:white}.placement-options button.selected{background:var(--accent-soft);border-width:2px;font-weight:800}.placement-grid button:disabled,.placement-submit:disabled{opacity:.5;cursor:not-allowed}.placement-good{color:#138052!important}.placement-bad{color:#bb4d4d!important}@media(max-width:700px){.placement-grid{grid-template-columns:1fr}}
+
+/* V115 — multi-skill placement */
+.placement-category{display:inline-block;color:var(--accent)!important;font-weight:700;font-size:.85rem;margin:0 0 8px}
+.placement-reading{margin:9px 0 15px;padding:14px 18px;border-inline-start:4px solid var(--accent);border-radius:8px;background:var(--paper);color:var(--ink);white-space:pre-wrap;line-height:1.8;text-align:left}
+.placement-options button{line-height:1.5;overflow-wrap:anywhere}
+.placement-options button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* V116: compact post-test competency summary. */
+.placement-breakdown{margin:1rem 0;padding:1rem;border:1px solid var(--border,#b5bdc5);border-radius:12px}.placement-breakdown ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.4rem 1rem;padding-inline-start:1.25rem}.placement-breakdown li{line-height:1.7}

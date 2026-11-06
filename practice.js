@@ -102,6 +102,7 @@ let activeRecognition=null;
 let voiceRecorder=null,voiceStream=null,voiceChunks=[],voiceUrl=null;
 let voiceMimeType="";
 let voicePermissionPending=false;
+let voiceFinalizing=false;
 let voiceRequestVersion=0;
 let meterContext=null,meterAnalyser=null,meterFrame=0,meterData=null;
 function stopVoiceMeter(){
@@ -139,12 +140,18 @@ function releaseVoiceStream(){if(voiceStream){voiceStream.getTracks().forEach(tr
 function clearVoice(){
  voiceRequestVersion++;
  if(voiceRecorder&&voiceRecorder.state!=='inactive'){voiceRecorder.onstop=null;try{voiceRecorder.stop()}catch{}}
+ voiceFinalizing=false;
  stopVoiceMeter();voiceRecorder=null;releaseVoiceStream();voiceChunks=[];voiceMimeType="";
  if(voiceUrl){URL.revokeObjectURL(voiceUrl);voiceUrl=null}
 }
 async function toggleVoiceRecording(){
- if(voiceRecorder&&voiceRecorder.state==='recording'){voiceStatus('جارٍ تجهيز التسجيل…');stopVoiceMeter();voiceRecorder.stop();return}
- if(voicePermissionPending)return;
+ if(voiceRecorder&&voiceRecorder.state==='recording'){
+  voiceFinalizing=true;voiceStatus('جارٍ تجهيز التسجيل…');stopVoiceMeter();
+  const btn=$('#recordVoice');if(btn)btn.disabled=true;
+  try{voiceRecorder.stop()}catch{voiceFinalizing=false;clearVoice();voiceStatus('تعذر إيقاف التسجيل. حاول مجدداً.');if(btn)btn.disabled=false}
+  return;
+ }
+ if(voicePermissionPending||voiceFinalizing)return;
  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){voiceStatus('التسجيل الصوتي غير مدعوم في هذا المتصفح.');return}
  if(!window.isSecureContext){voiceStatus('يحتاج التسجيل إلى HTTPS أو localhost.');return}
  const targetLevel=level,targetIdx=idx,requestVersion=++voiceRequestVersion;
@@ -156,9 +163,11 @@ async function toggleVoiceRecording(){
   clearVoice();voiceStream=stream;voiceChunks=[];
   const recorder=new MediaRecorder(stream);voiceRecorder=recorder;
   recorder.ondataavailable=e=>{if(e.data?.size)voiceChunks.push(e.data)};
-  recorder.onerror=()=>{stopVoiceMeter();voiceStatus('حدث خطأ أثناء التسجيل.');releaseVoiceStream()};
+  recorder.onerror=()=>{if(voiceRecorder!==recorder)return;clearVoice();voiceStatus('حدث خطأ أثناء التسجيل. حاول مجدداً.');const button=$('#recordVoice');if(button){button.disabled=false;button.textContent='🎙️ ابدأ التسجيل'}};
   recorder.onstop=()=>{
-   stopVoiceMeter();releaseVoiceStream();if(voiceRecorder!==recorder)return;
+   // An obsolete recorder must never release a newer recorder's microphone.
+   if(voiceRecorder!==recorder)return;
+   stopVoiceMeter();releaseVoiceStream();voiceFinalizing=false;
    const blob=new Blob(voiceChunks,{type:recorder.mimeType||'audio/webm'});
    voiceMimeType=blob.type;
    if(blob.size&&mode==='speak'&&level===targetLevel&&idx===targetIdx){
