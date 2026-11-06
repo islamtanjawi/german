@@ -1,0 +1,6 @@
+تثبيت V91 فوق V90:
+انسخ الملفات الثلاثة conjugation.js وlessons-advanced.js وsw.js إلى جذر مجلد german ثم Replace.
+بعد ذلك افتح GitHub Desktop > Summary: German Academy V91 > Commit to main > Push origin.
+
+إذا بقي موقعك على أي إصدار من V82 إلى V89، استخدم الحزمة الموحدة V82-to-V91 بدلاً من هذه الملفات منفردة.
+لا تعدّل Cloudflare أو قاعدة البيانات. لا تفتح الأقفال للاختبار.

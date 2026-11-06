@@ -423,6 +423,16 @@ function verbCard(w,i){return `<button data-verb="${i}" class="verb-item ${i===s
 function table(heading,rows){return `<section class="tense"><h3>${heading}</h3><div class="table-scroll"><table><thead><tr><th>الضمير</th><th>التصريف</th><th>استمع</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td dir="ltr">${pron[i]}</td><td dir="ltr"><b>${esc(r)}</b></td><td><button data-speak="${esc(pron[i].split('/')[0]+' '+r)}" aria-label="استمع">🔊</button></td></tr>`).join('')}</tbody></table></div></section>`}
 function detail(w){const verb=w[0],f=present(verb),p=pastInfo(verb),level=M[m].level;let h=`<div class="detail-head"><div><span class="eyebrow">${level} · فعل ${selected+1} من 15</span><h2 dir="ltr">${esc(verb)}</h2><p>${esc(w[1])}</p></div><button data-speak="${esc(verb)}" class="speak">🔊 استمع</button></div>`;
 if(f){h+=`<p class="hint">${verifiedPresent[baseWord(verb)]||irregular[baseWord(verb)]?'✓ تصريف حاضر في الجداول المراجَعة':'⚪ تصريف مقترح وفق قاعدة عامة (غير مدقَّق لهذا الفعل)'}</p>`;h+=table('Präsens — المضارع',f);if(!verifiedPresent[baseWord(verb)]&&!irregular[baseWord(verb)])h+='<p class="hint">هذه الصيغ مقترحة آلياً وفق قواعد عامة وقد لا تصح مع جميع الأفعال، لذلك لا تدخل أسئلة التصريف المصححة آلياً قبل التحقق منها. راجع القاموس المرتبط أدناه.</p>'}else h+=`<div class="notice"><strong>تصريف يحتاج إلى مراجعة خاصة</strong><p>هذا الفعل قد يكون شاذاً أو منفصلاً أو انعكاسياً. لا نعرض تصريفاً آلياً غير مؤكّد. استمع إلى المصدر وراجعه في قاموس تصريف موثوق.</p><a href="https://www.verbformen.com/conjugation/?w=${encodeURIComponent(baseWord(verb))}" target="_blank" rel="noopener noreferrer">فتح جدول التصريف في Verbformen ↗</a></div>`;
+// V91: vorstellen has two reflexive senses; show and grade a clearly identified sense.
+if(verb==='sich vorstellen'&&verifiedPresent.vorstellen){
+ const imagine=verifiedPresent.vorstellen.map((form,i)=>{
+  const parts=form.split(' ');
+  parts.splice(1,0,['mir','dir','sich','uns','euch','sich'][i]);
+  return parts.join(' ');
+ });
+ h+=`<section class="tense"><h3>انتبه: لهذا الفعل معنيان مختلفان</h3><p><b>التعريف بالنفس — Akkusativ:</b> <span dir="ltr">Ich stelle mich vor.</span> (أعرّف بنفسي).</p><p><b>التخيّل — Dativ:</b> <span dir="ltr">Ich stelle mir eine Reise vor.</span> (أتخيّل رحلة).</p><p class="hint">في الاختبار سنحدد معنى التعريف بالنفس حتى لا يُعدّ معنى التخيّل خطأً.</p></section>`;
+ h+=table('Präsens — التخيّل (Dativ)',imagine);
+}
 if(level!=='A1'){if(p){h+=`<section class="tense"><h3>Perfekt — الماضي المركب</h3><p dir="ltr"><strong>${esc(pastSentence(verb,p,'perfekt'))}</strong></p><p>الفعل المساعد: ${p[2]==='sein'?'sein':'haben'} · Partizip II: <b dir="ltr">${esc(p[1])}</b></p></section>`}else h+=`<p class="hint">للحصول على Perfekt الصحيح لهذا الفعل، افتح القاموس المرتبط أعلاه أو رابط التحقق أدناه.</p>`}
 if(level==='B1'&&p){h+=`<section class="tense"><h3>Präteritum — الماضي البسيط</h3><p dir="ltr"><strong>${esc(pastSentence(verb,p,'praeteritum'))}</strong></p><p>هذه صيغة المتكلم (ich)، وليست جدولاً كاملاً لجميع الضمائر.</p></section>`}
 if(/^sich\s+/.test(verb)&&reflexiveDative.has(baseWord(verb)))h+='<p class="hint">ملاحظة: هذا الاستعمال يأخذ الضمير الانعكاسي في حالة Dativ (mir / dir). وغالباً يحتاج إلى مفعول أو تتمة في الجملة.</p>';
@@ -441,7 +451,7 @@ function makeQuestion(w,i){
    const distractors=[...new Set(forms.filter(x=>x!==correct))];
    if(distractors.length>=2){
     const options=shuffle([correct,...shuffle(distractors).slice(0,3)]);
-    return {w,i,kind:'form',person,correct,options,typed:quizMode==='typing'};
+    return {w,i,kind:'form',person,correct,options,typed:quizMode==='typing',context:w[0]==='sich vorstellen'?'المقصود: أعرّف بنفسي (Akkusativ)، وليس أتخيّل (Dativ).':''};
    }
   }
  }
@@ -489,7 +499,7 @@ function quizView(){
  }else{
   content=`<div class="quiz-options">${item.options.map((o,i)=>`<button data-answer="${i}" ${answered?'disabled':''} class="${answered?(o===item.correct?'right':q.answer===i?'wrong':''):''}" ${form?'dir="ltr"':''}>${esc(o)}</button>`).join('')}</div>`;
  }
- return `<div class="quiz-panel"><span class="eyebrow">اختبار اليوم ${d} · ${M[m].level}${item.typed?' · كتابة':''}</span><h2>${form?(item.typed?'اكتب التصريف الصحيح في المضارع':'اختر التصريف الصحيح في المضارع'):'ما معنى هذا الفعل؟'}</h2><div class="quiz-progress">السؤال ${q.index+1} من ${q.items.length} · النتيجة ${q.score}</div><div class="progress-track"><i style="width:${q.index/q.items.length*100}%"></i></div><h2 dir="ltr" class="quiz-word">${esc(w[0])}</h2>${form?`<p dir="ltr" class="quiz-pronoun">${esc(pron[item.person])} ______</p>`:''}${content}${answered?`<div class="feedback ${correct?'good':'bad'}" role="status">${correct?'إجابة صحيحة!':'الإجابة الصحيحة: '+esc(item.correct)}${form?`<p dir="ltr">${esc(pron[item.person].split('/')[0]+' '+item.correct)}</p>`:''}</div><button id="nextQuestion" class="primary">${q.index===q.items.length-1?'عرض النتيجة':'السؤال التالي ←'}</button>`:''}${quizMode==='typing'&&!item.typed&&!answered?'<p class="hint">هذا الفعل ليس له جدول مضارع مدقَّق، لذلك يظهر سؤال المعنى بدلاً من كتابة تصريف تخميني.</p>':''}</div>`;
+ return `<div class="quiz-panel"><span class="eyebrow">اختبار اليوم ${d} · ${M[m].level}${item.typed?' · كتابة':''}</span><h2>${form?(item.typed?'اكتب التصريف الصحيح في المضارع':'اختر التصريف الصحيح في المضارع'):'ما معنى هذا الفعل؟'}</h2><div class="quiz-progress">السؤال ${q.index+1} من ${q.items.length} · النتيجة ${q.score}</div><div class="progress-track"><i style="width:${q.index/q.items.length*100}%"></i></div><h2 dir="ltr" class="quiz-word">${esc(w[0])}</h2>${item.context?`<p class="hint">${esc(item.context)}</p>`:''}${form?`<p dir="ltr" class="quiz-pronoun">${esc(pron[item.person])} ______</p>`:''}${content}${answered?`<div class="feedback ${correct?'good':'bad'}" role="status">${correct?'إجابة صحيحة!':'الإجابة الصحيحة: '+esc(item.correct)}${form?`<p dir="ltr">${esc(pron[item.person].split('/')[0]+' '+item.correct)}</p>`:''}</div><button id="nextQuestion" class="primary">${q.index===q.items.length-1?'عرض النتيجة':'السؤال التالي ←'}</button>`:''}${quizMode==='typing'&&!item.typed&&!answered?'<p class="hint">هذا الفعل ليس له جدول مضارع مدقَّق، لذلك يظهر سؤال المعنى بدلاً من كتابة تصريف تخميني.</p>':''}</div>`;
 }
 function render(){if(!levelOpen(m)){m=0;d=1;quiz=null}if(!dayOpen(m,d)){d=1;quiz=null}selected=Math.min(selected,14);$('root').innerHTML=title()+levels()+days()+(quiz?quizView():dayView())+'<p class="footnote">تُحفظ نتائج التصريف على الجهاز وتُزامَن مع الحساب السحابي عند توفر الاتصال.</p>'}
 function lockNotice(t){if(window.UI){UI.play('lock');UI.toast(t)}else alert(t)}
