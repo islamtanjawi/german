@@ -1,0 +1,9 @@
+German Academy V81 — Goethe reliability update
+- Shuffle reading and listening question order and answer options in NEW exam attempts, while retaining each skill section.
+- Store the exact ordered question snapshot in drafts to resume exams without shifting answers, even after bank updates.
+- Existing saved V80 exam drafts continue with their original question order; old results remain compatible.
+- Tie error review entries to original question text and source rather than question index; keep legacy entries.
+- Use the actual per-attempt question set for scoring, navigation and review.
+- Preserve historical self-assessment values when a save fails.
+- Cloudflare, account credentials, leaderboard and progress storage keys are unchanged.
+- Does not certify authenticity of Goethe official exam questions.

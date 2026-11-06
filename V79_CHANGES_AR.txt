@@ -1,0 +1,9 @@
+German Academy V79 — تدريبات الماضي والأفعال الانعكاسية
+
+- تصحيح ترتيب الضمير الانعكاسي في Präteritum، مثل ich erinnerte mich، بدلاً من ich mich erinnerte.
+- تمييز ثلاثة أفعال انعكاسية في حالة Dativ: sich merken، sich einbilden، sich vornehmen.
+- إضافة تصريفات مراجعة محددة لهذه الأفعال في المضارع، وإضافة ست صيغ ماضٍ موثقة للأفعال المرافقة.
+- إضافة تدريب كتابي اختياري داخل تفاصيل الفعل: Perfekt لمستويي A2/B1، وPräteritum لمستوى B1.
+- التدريب الإضافي لا يغير التقدم المحفوظ أو أقفال المراحل أو حساب Cloudflare.
+
+التحديث يتضمن conjugation.js، conjugation.css، sw.js فقط. انسخها إلى مجلد german واستبدل الملفات القديمة، ثم Commit ثم Push.

@@ -163,7 +163,210 @@ Object.assign(verifiedPresent, {"erklären": ["erkläre", "erklärst", "erklärt
 // V50: explicitly enumerated six-person forms for common A1–B1 verbs.
 Object.assign(verifiedPresent,window.ACADEMY_REVIEWED_V50||{});
 Object.assign(verifiedPresent,window.ACADEMY_REVIEWED_V76||{});
+// Reviewed reflexive dative verb stems from A2/B1 (six-person Präsens).
+Object.assign(verifiedPresent,{
+ 'merken':['merke','merkst','merkt','merken','merkt','merken'],
+ 'einbilden':['bilde ein','bildest ein','bildet ein','bilden ein','bildet ein','bilden ein'],
+ 'vornehmen':['nehme vor','nimmst vor','nimmt vor','nehmen vor','nehmt vor','nehmen vor']
+});
 const past={sein:['war','gewesen','sein'],haben:['hatte','gehabt','haben'],werden:['wurde','geworden','sein'],gehen:['ging','gegangen','sein'],kommen:['kam','gekommen','sein'],sehen:['sah','gesehen','haben'],lesen:['las','gelesen','haben'],sprechen:['sprach','gesprochen','haben'],essen:['aß','gegessen','haben'],nehmen:['nahm','genommen','haben'],geben:['gab','gegeben','haben'],fahren:['fuhr','gefahren','sein'],schlafen:['schlief','geschlafen','haben'],laufen:['lief','gelaufen','sein'],wissen:['wusste','gewusst','haben'],können:['konnte','gekonnt','haben'],müssen:['musste','gemusst','haben'],wollen:['wollte','gewollt','haben'],dürfen:['durfte','gedurft','haben'],sollen:['sollte','gesollt','haben'],mögen:['mochte','gemocht','haben'],machen:['machte','gemacht','haben'],lernen:['lernte','gelernt','haben'],arbeiten:['arbeitete','gearbeitet','haben'],spielen:['spielte','gespielt','haben'],kaufen:['kaufte','gekauft','haben'],trinken:['trank','getrunken','haben'],schreiben:['schrieb','geschrieben','haben'],finden:['fand','gefunden','haben'],bleiben:['blieb','geblieben','sein'],denken:['dachte','gedacht','haben'],bringen:['brachte','gebracht','haben'],kennen:['kannte','gekannt','haben'],nennen:['nannte','genannt','haben'],stehen:['stand','gestanden','haben'],sitzen:['saß','gesessen','haben'],liegen:['lag','gelegen','haben'],helfen:['half','geholfen','haben'],treffen:['traf','getroffen','haben'],vergessen:['vergaß','vergessen','haben'],halten:['hielt','gehalten','haben'],tragen:['trug','getragen','haben'],lassen:['ließ','gelassen','haben'],beginnen:['begann','begonnen','haben'],gewinnen:['gewann','gewonnen','haben'],verlieren:['verlor','verloren','haben'],entscheiden:['entschied','entschieden','haben'],verstehen:['verstand','verstanden','haben'],bekommen:['bekam','bekommen','haben'],anrufen:['rief an','angerufen','haben'],aufstehen:['stand auf','aufgestanden','sein'],einkaufen:['kaufte ein','eingekauft','haben'],anfangen:['fing an','angefangen','haben'],einladen:['lud ein','eingeladen','haben'],mitnehmen:['nahm mit','mitgenommen','haben'],aussehen:['sah aus','ausgesehen','haben'],aufwachen:['wachte auf','aufgewacht','sein'],mitbringen:['brachte mit','mitgebracht','haben'],ankommen:['kam an','angekommen','sein'],ausgehen:['ging aus','ausgegangen','sein'],zurückkommen:['kam zurück','zurückgekommen','sein']};
+// V78: selected explicit Präteritum (ich), Partizip II, and auxiliary for A2/B1.
+Object.assign(past, {
+  "fragen": [
+    "fragte",
+    "gefragt",
+    "haben"
+  ],
+  "antworten": [
+    "antwortete",
+    "geantwortet",
+    "haben"
+  ],
+  "bezahlen": [
+    "bezahlte",
+    "bezahlt",
+    "haben"
+  ],
+  "besuchen": [
+    "besuchte",
+    "besucht",
+    "haben"
+  ],
+  "erzählen": [
+    "erzählte",
+    "erzählt",
+    "haben"
+  ],
+  "verkaufen": [
+    "verkaufte",
+    "verkauft",
+    "haben"
+  ],
+  "vorbereiten": [
+    "bereitete vor",
+    "vorbereitet",
+    "haben"
+  ],
+  "aufräumen": [
+    "räumte auf",
+    "aufgeräumt",
+    "haben"
+  ],
+  "zumachen": [
+    "machte zu",
+    "zugemacht",
+    "haben"
+  ],
+  "abholen": [
+    "holte ab",
+    "abgeholt",
+    "haben"
+  ],
+  "aufmachen": [
+    "machte auf",
+    "aufgemacht",
+    "haben"
+  ],
+  "warten": [
+    "wartete",
+    "gewartet",
+    "haben"
+  ],
+  "wohnen": [
+    "wohnte",
+    "gewohnt",
+    "haben"
+  ],
+  "putzen": [
+    "putzte",
+    "geputzt",
+    "haben"
+  ],
+  "kochen": [
+    "kochte",
+    "gekocht",
+    "haben"
+  ],
+  "tanzen": [
+    "tanzte",
+    "getanzt",
+    "haben"
+  ],
+  "suchen": [
+    "suchte",
+    "gesucht",
+    "haben"
+  ],
+  "öffnen": [
+    "öffnete",
+    "geöffnet",
+    "haben"
+  ],
+  "schließen": [
+    "schloss",
+    "geschlossen",
+    "haben"
+  ],
+  "schneiden": [
+    "schnitt",
+    "geschnitten",
+    "haben"
+  ],
+  "ziehen": [
+    "zog",
+    "gezogen",
+    "haben"
+  ],
+  "holen": [
+    "holte",
+    "geholt",
+    "haben"
+  ],
+  "weiterleiten": [
+    "leitete weiter",
+    "weitergeleitet",
+    "haben"
+  ],
+  "vorschlagen": [
+    "schlug vor",
+    "vorgeschlagen",
+    "haben"
+  ],
+  "teilnehmen": [
+    "nahm teil",
+    "teilgenommen",
+    "haben"
+  ],
+  "gefallen": [
+    "gefiel",
+    "gefallen",
+    "haben"
+  ],
+  "gehören": [
+    "gehörte",
+    "gehört",
+    "haben"
+  ],
+  "planen": [
+    "plante",
+    "geplant",
+    "haben"
+  ],
+  "bestellen": [
+    "bestellte",
+    "bestellt",
+    "haben"
+  ],
+  "prüfen": [
+    "prüfte",
+    "geprüft",
+    "haben"
+  ],
+  "fortsetzen": [
+    "setzte fort",
+    "fortgesetzt",
+    "haben"
+  ],
+  "abholzen": [
+    "holzte ab",
+    "abgeholzt",
+    "haben"
+  ],
+  "aufforsten": [
+    "forstete auf",
+    "aufgeforstet",
+    "haben"
+  ],
+  "weiterbilden": [
+    "bildete weiter",
+    "weitergebildet",
+    "haben"
+  ],
+  "umarmen": [
+    "umarmte",
+    "umarmt",
+    "haben"
+  ],
+  "verbessern": [
+    "verbesserte",
+    "verbessert",
+    "haben"
+  ],
+  "beschreiben": [
+    "beschrieb",
+    "beschrieben",
+    "haben"
+  ]
+});
+// Individually reviewed Präteritum ich / Partizip II / auxiliary for reflexive practice.
+Object.assign(past,{
+ 'erinnern':['erinnerte','erinnert','haben'],
+ 'merken':['merkte','gemerkt','haben'],
+ 'einbilden':['bildete ein','eingebildet','haben'],
+ 'vornehmen':['nahm vor','vorgenommen','haben'],
+ 'vorstellen':['stellte vor','vorgestellt','haben'],
+ 'ausruhen':['ruhte aus','ausgeruht','haben']
+});
 let state={done:{},errors:{},scores:{}};try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')state={...state,...s,done:s.done&&typeof s.done==='object'&&!Array.isArray(s.done)?s.done:{},errors:s.errors&&typeof s.errors==='object'&&!Array.isArray(s.errors)?s.errors:{},scores:s.scores&&typeof s.scores==='object'&&!Array.isArray(s.scores)?s.scores:{}}}catch(e){}
 let vocab={};try{vocab=JSON.parse(localStorage.getItem(PROGRESS))||{}}catch(e){}
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -174,18 +377,35 @@ const dayOpen=(m,d)=>levelOpen(m)&&(d===1||state.done[`${m}-${d-1}`]===true);
 let m=0,d=1,selected=0,quiz=null,quizMode="choice";
 function speak(t){if(!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=.84;speechSynthesis.cancel();speechSynthesis.speak(u)}
 function baseWord(w){return w.replace(/^sich\s+/,'').trim()}
-const reflexiveForm=(form,i)=>{const parts=form.split(' '),pronoun=['mich','dich','sich','uns','euch','sich'][i];parts.splice(1,0,pronoun);return parts.join(' ')};
+// Dative reflexive pronouns are required with these uses (e.g. ich merke mir ...).
+// Other reflexive entries retain the accusative forms unless individually reviewed.
+const reflexiveDative=new Set(['merken','einbilden','vornehmen']);
+const reflexivePronoun=(verb,i)=> (reflexiveDative.has(verb)
+ ? ['mir','dir','sich','uns','euch','sich']
+ : ['mich','dich','sich','uns','euch','sich'])[i];
+const reflexiveForm=(form,i,verb)=>{const parts=form.split(' ');parts.splice(1,0,reflexivePronoun(verb,i));return parts.join(' ')};
 function simpleForm(w){if(irregular[w])return irregular[w];if(/\s/.test(w))return null;let root=w.endsWith('en')?w.slice(0,-2):w.endsWith('n')?w.slice(0,-1):null;if(!root)return null;
 // Restrict generated tables to regular patterns; stem-vowel and prefix irregularities are explicitly marked for review.
 const changed=/^(be|ge|er|ver|zer|ent|emp|miss)/.test(w);const suspect=/(?:fahren|tragen|schlafen|laufen|fallen|halten|waschen|fangen|lassen|raten|laden|graben|stoßen|treten|essen|lesen|sehen|sprechen|nehmen|geben|helfen|treffen|werfen|brechen|sterben|stehlen|empfehlen|vergessen|messen|treffen|gelten|werden|wissen|tun|ziehen|fliegen|schließen|schießen|gießen|genießen|verlieren|frieren|biegen|bieten|bitten|bleiben|schreiben|steigen|schweigen|singen|springen|trinken|schwimmen|finden|binden|gewinnen|beginnen|denken|bringen|kennen|nennen|rennen|brennen|senden|wenden|stehen|sitzen|liegen)/.test(w);
 if(suspect||changed&&/(?:nehmen|geben|sehen|stehen|kommen|fahren|finden|halten|lassen|ziehen|treten|fallen|laufen|brechen|sprechen|schreiben|bringen|denken)/.test(w))return null;
 let e=/(?:[td]|chn|ffn|gn|tm|dm)$/.test(root)?'e':'';let du=/[sxzß]$/.test(root)?'t':'st';if(w.endsWith('eln')){const stem=w.slice(0,-1);return [w.slice(0,-3)+'le',stem+'st',stem+'t',w,stem+'t',w]};if(w.endsWith('ern'))return [root+'e',root+'st',root+'t',w,root+'t',w];return [root+'e',root+e+du,root+e+'t',w,root+e+'t',w]}
-function present(w){const reflex=/^sich\s+/.test(w),v=baseWord(w);if(verifiedPresent[v]){const f=verifiedPresent[v];return reflex?f.map(reflexiveForm):f;}const prefix=v.match(/^(zurück|zusammen|weiter|fest|fort|her|hin|los|mit|nach|vor|weg|bei|ein|auf|aus|ab|an|zu)(.+)$/);let f=prefix?null:simpleForm(v);if(prefix){const stem=prefix[2];
+function present(w){const reflex=/^sich\s+/.test(w),v=baseWord(w);if(verifiedPresent[v]){const f=verifiedPresent[v];return reflex?f.map((form,i)=>reflexiveForm(form,i,v)):f;}const prefix=v.match(/^(zurück|zusammen|weiter|fest|fort|her|hin|los|mit|nach|vor|weg|bei|ein|auf|aus|ab|an|zu)(.+)$/);let f=prefix?null:simpleForm(v);if(prefix){const stem=prefix[2];
 // A prefix-like spelling alone does not prove separability (e.g. antworten, besuchen).
 // Generate only when the base verb is independently attested in our irregular list.
 const core=irregular[stem]||null;
-if(core)f=core.map(x=>x+' '+prefix[1]);}if(!f)return null;return reflex?f.map(reflexiveForm):f}
+if(core)f=core.map(x=>x+' '+prefix[1]);}if(!f)return null;return reflex?f.map((form,i)=>reflexiveForm(form,i,v)):f}
 function pastInfo(w){return past[baseWord(w)]||null}
+// A finite Präteritum verb comes immediately after ich; the reflexive pronoun
+// follows that finite form, and a separable particle stays at the end.
+function pastSentence(w,entry,tense){
+ const reflexive=/^sich\s+/.test(w),verb=baseWord(w);
+ const pronoun=reflexive?reflexivePronoun(verb,0):null;
+ if(tense==='perfekt')return ['ich',entry[2]==='sein'?'bin':'habe',pronoun,entry[1]].filter(Boolean).join(' ');
+ const [finite,...particles]=entry[0].trim().split(/\s+/);
+ return ['ich',finite,pronoun,...particles].filter(Boolean).join(' ');
+}
+function pastDrillForm(tense,label){return `<form class="past-drill-form" data-tense="${tense}"><label>${label}<input name="sentence" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="140" required placeholder="ich ..." aria-label="اكتب جملة ${label} بالألمانية"></label><button type="submit">تحقق من إجابتي</button><p class="past-result" role="status" aria-live="polite"></p></form>`}
+function normalizePastAnswer(text){return String(text??'').normalize('NFC').toLocaleLowerCase('de-DE').trim().replace(/[.!?؟،]+$/u,'').replace(/\s+/g,' ')}
 function info(m,d){return M[m].verbs.slice((d-1)*PER,d*PER)}
 function title(){return `<div class="hero-card"><span class="eyebrow">VERBKONJUGATION · A1—B1</span><h1>الصرف والتحويل</h1><p>15 فعلاً يومياً · 30 يوماً لكل مستوى · تعلّم، استمع، اختبر نفسك، وافتح اليوم التالي.</p><div class="mini-stats"><span>📚 1350 مدخلاً للتعلّم</span><span>📆 90 يوماً</span><span>✓ ${Object.keys(state.done).filter(k=>/^[012]-(?:[1-9]|[12]\d|30)$/.test(k)&&state.done[k]===true).length} يوماً مكتملة</span></div></div>`}
 function levels(){return `<div class="levels">${M.map((x,i)=>`<button data-level="${i}" class="level-card ${m===i?'active':''} ${levelOpen(i)?'':'locked'}"><strong>${x.level}</strong><span>450 مدخلاً · 30 يوماً</span><small>${levelOpen(i)?levelDone(i)?'✓ مكتمل':'متاح':'🔒 أكمل المستوى السابق'}</small></button>`).join('')}</div>`}
@@ -194,10 +414,12 @@ function verbCard(w,i){return `<button data-verb="${i}" class="verb-item ${i===s
 function table(heading,rows){return `<section class="tense"><h3>${heading}</h3><div class="table-scroll"><table><thead><tr><th>الضمير</th><th>التصريف</th><th>استمع</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td dir="ltr">${pron[i]}</td><td dir="ltr"><b>${esc(r)}</b></td><td><button data-speak="${esc(pron[i].split('/')[0]+' '+r)}" aria-label="استمع">🔊</button></td></tr>`).join('')}</tbody></table></div></section>`}
 function detail(w){const verb=w[0],f=present(verb),p=pastInfo(verb),level=M[m].level;let h=`<div class="detail-head"><div><span class="eyebrow">${level} · فعل ${selected+1} من 15</span><h2 dir="ltr">${esc(verb)}</h2><p>${esc(w[1])}</p></div><button data-speak="${esc(verb)}" class="speak">🔊 استمع</button></div>`;
 if(f){h+=`<p class="hint">${verifiedPresent[baseWord(verb)]||irregular[baseWord(verb)]?'✓ تصريف حاضر في الجداول المراجَعة':'⚪ تصريف مقترح وفق قاعدة عامة (غير مدقَّق لهذا الفعل)'}</p>`;h+=table('Präsens — المضارع',f);if(!verifiedPresent[baseWord(verb)]&&!irregular[baseWord(verb)])h+='<p class="hint">هذه الصيغ مقترحة آلياً وفق قواعد عامة وقد لا تصح مع جميع الأفعال، لذلك لا تدخل أسئلة التصريف المصححة آلياً قبل التحقق منها. راجع القاموس المرتبط أدناه.</p>'}else h+=`<div class="notice"><strong>تصريف يحتاج إلى مراجعة خاصة</strong><p>هذا الفعل قد يكون شاذاً أو منفصلاً أو انعكاسياً. لا نعرض تصريفاً آلياً غير مؤكّد. استمع إلى المصدر وراجعه في قاموس تصريف موثوق.</p><a href="https://www.verbformen.com/conjugation/?w=${encodeURIComponent(baseWord(verb))}" target="_blank" rel="noopener noreferrer">فتح جدول التصريف في Verbformen ↗</a></div>`;
-if(level!=='A1'){if(p){h+=`<section class="tense"><h3>Perfekt — الماضي المركب</h3><p dir="ltr"><strong>ich ${p[2]==='sein'?'bin':'habe'} ${/^sich\s+/.test(verb)?'mich ':''}${esc(p[1])}</strong></p><p>الفعل المساعد: ${p[2]==='sein'?'sein':'haben'} · Partizip II: <b dir="ltr">${esc(p[1])}</b></p></section>`}else h+=`<p class="hint">للحصول على Perfekt الصحيح لهذا الفعل، افتح القاموس المرتبط أعلاه أو رابط التحقق أدناه.</p>`}
-if(level==='B1'&&p){h+=`<section class="tense"><h3>Präteritum — الماضي البسيط</h3><p dir="ltr"><strong>ich ${/^sich\s+/.test(verb)?'mich ':''}${esc(p[0])}</strong></p><p>هذه صيغة المتكلم، وليست جدولاً كاملاً لجميع الضمائر.</p></section>`}
+if(level!=='A1'){if(p){h+=`<section class="tense"><h3>Perfekt — الماضي المركب</h3><p dir="ltr"><strong>${esc(pastSentence(verb,p,'perfekt'))}</strong></p><p>الفعل المساعد: ${p[2]==='sein'?'sein':'haben'} · Partizip II: <b dir="ltr">${esc(p[1])}</b></p></section>`}else h+=`<p class="hint">للحصول على Perfekt الصحيح لهذا الفعل، افتح القاموس المرتبط أعلاه أو رابط التحقق أدناه.</p>`}
+if(level==='B1'&&p){h+=`<section class="tense"><h3>Präteritum — الماضي البسيط</h3><p dir="ltr"><strong>${esc(pastSentence(verb,p,'praeteritum'))}</strong></p><p>هذه صيغة المتكلم (ich)، وليست جدولاً كاملاً لجميع الضمائر.</p></section>`}
+if(/^sich\s+/.test(verb)&&reflexiveDative.has(baseWord(verb)))h+='<p class="hint">ملاحظة: هذا الاستعمال يأخذ الضمير الانعكاسي في حالة Dativ (mir / dir). وغالباً يحتاج إلى مفعول أو تتمة في الجملة.</p>';
+if(level!=='A1'&&p){h+=`<section class="past-drill"><h3>✍️ تدرب على الماضي بنفسك</h3><p class="hint">اكتب الصيغة كاملة بدءاً من ich. التدريب للتثبيت فقط ولا يغيّر نقاطك أو أقفال المراحل.</p>${pastDrillForm('perfekt','Perfekt — الماضي المركب')}${level==='B1'?pastDrillForm('praeteritum','Präteritum — الماضي البسيط'):''}</section>`}
 h+=`<div class="detail-footer"><a href="https://www.verbformen.com/conjugation/?w=${encodeURIComponent(baseWord(verb))}" target="_blank" rel="noopener noreferrer">📖 جميع الصيغ الموثقة</a><button data-speak="${esc(verb)}">🔊 النطق</button></div>`;return h}
-function dayView(){const arr=info(m,d);return `<div class="day-heading"><div><h2>اليوم ${d} · ${M[m].level}</h2><p>اختر فعلاً لتظهر تفاصيله وتصريفاته المناسبة لمستواك.</p></div><span>${arr.length}/15 فعلاً</span></div><div class="learning-layout"><div class="verb-list">${arr.map(verbCard).join('')}</div><article class="verb-detail">${detail(arr[selected])}</article></div><div class="day-actions"><div class="quiz-mode-wrap" role="group" aria-label="طريقة الاختبار"><span>طريقة الاختبار:</span><button data-quiz-mode="choice" aria-pressed="${quizMode==='choice'}" class="${quizMode==='choice'?'chosen-mode':''}">اختيار الإجابة</button><button data-quiz-mode="typing" aria-pressed="${quizMode==='typing'}" class="${quizMode==='typing'?'chosen-mode':''}">⌨️ كتابة التصريف</button></div><button class="primary" id="beginQuiz">🧠 اختبار أفعال اليوم</button><span>الاختبار يجمع بين معاني الأفعال والتصريفات التي تتوفر لها جداول مراجَعة؛ النجاح 12 من 15 لفتح اليوم التالي.</span></div>`}
+function dayView(){const arr=info(m,d);return `<div class="day-heading"><div><h2>اليوم ${d} · ${M[m].level}</h2><p>اختر فعلاً لتظهر تفاصيله وتصريفاته المناسبة لمستواك.</p></div><span>${arr.length}/15 فعلاً</span></div><div class="learning-layout"><div class="verb-list">${arr.map(verbCard).join('')}</div><article class="verb-detail">${detail(arr[selected])}</article></div><div class="day-actions"><div class="quiz-mode-wrap" role="group" aria-label="طريقة الاختبار"><span>طريقة الاختبار:</span><button data-quiz-mode="choice" aria-pressed="${quizMode==='choice'}" class="${quizMode==='choice'?'chosen-mode':''}">اختيار الإجابة</button><button data-quiz-mode="typing" aria-pressed="${quizMode==='typing'}" class="${quizMode==='typing'?'chosen-mode':''}">⌨️ كتابة التصريف</button></div><button class="primary" id="beginQuiz">🧠 اختبار أفعال اليوم</button><span>الاختبار يجمع بين معاني الأفعال والتصريفات التي تتوفر لها جداول مراجَعة؛ النجاح بـ80% من الإجابات لفتح اليوم التالي.</span></div>`}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
 function makeQuestion(w,i){
  const forms=present(w[0]);
@@ -275,6 +497,25 @@ if(b.id==='nextQuestion'&&quiz&&quiz.answer!==null){quiz.index=Math.min(quiz.ite
 if(b.id==='retryQuizSave'&&quiz&&quiz.saveFailed){completeQuiz();render();return}
 if(b.id==='endQuiz'){if(quiz?.saveFailed&&!confirm('لم يتم حفظ نتيجة هذا الاختبار. هل تريد الخروج رغم ذلك؟'))return;quiz=null;render();return}
 });
-$('root').addEventListener('submit',e=>{if(e.target.id!=='typeForm')return;e.preventDefault();if(!quiz||quiz.answer!==null)return;const input=e.target.querySelector('#typedAnswer');if(input)submitQuizAnswer(input.value)});
+$('root').addEventListener('submit',e=>{
+ if(e.target.classList.contains('past-drill-form')){
+  e.preventDefault();
+  if(quiz)return;
+  const tense=e.target.dataset.tense;
+  if(!['perfekt','praeteritum'].includes(tense)||(tense==='praeteritum'&&M[m].level!=='B1'))return;
+  const word=info(m,d)[selected]?.[0],entry=word?pastInfo(word):null;
+  if(!entry)return;
+  const input=e.target.elements.namedItem('sentence'),result=e.target.querySelector('.past-result');
+  if(!input||!result)return;
+  const answer=pastSentence(word,entry,tense);
+  const correct=normalizePastAnswer(input.value)===normalizePastAnswer(answer);
+  result.textContent=correct?'✓ صحيح! أحسنت.':'راجع ترتيب الكلمات. الإجابة النموذجية: '+answer;
+  result.className='past-result '+(correct?'good':'bad');
+  return;
+ }
+ if(e.target.id!=='typeForm')return;
+ e.preventDefault();if(!quiz||quiz.answer!==null)return;
+ const input=e.target.querySelector('#typedAnswer');if(input)submitQuizAnswer(input.value)
+});
 render();
 })();

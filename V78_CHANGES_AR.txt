@@ -1,0 +1,17 @@
+German Academy V78 — مراجعة الصرف والتحويل
+
+التصحيحات
+- إصلاح abholzen: ich holze ab, du holzt ab, er holzt ab (فعل منفصل).
+- إصلاح aufforsten: ich forste auf, du forstest auf, er forstet auf (فعل منفصل).
+- إضافة 37 مدخلاً جديداً لتصريفات الماضي (Präteritum للمتكلم، Partizip II، والفعل المساعد) في المستويات A2/B1، مع الحفاظ على جميع سجلات التقدم والحسابات.
+- تحديث نص النجاح إلى نسبة 80% وتحديث ذاكرة العمل دون اتصال للإصدار 78.
+
+خطوات النشر في GitHub Desktop
+1. فك ضغط ZIP التحديث.
+2. انسخ الملفات الثلاثة: conjugation-reviewed-v76.js وconjugation.js وsw.js إلى مجلد german.
+3. اختر Replace عند طلب الاستبدال.
+4. داخل GitHub Desktop، اكتب German Academy V78 ثم Commit to main ثم Push origin.
+5. افتح صفحة الصرف والتحويل وحدثها Ctrl+Shift+R.
+
+لا حاجة لتعديل Cloudflare أو حذف قاعدة البيانات.
+لا يعتبر هذا تدقيقاً نهائياً لجميع أفعال المنهج.

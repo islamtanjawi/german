@@ -9,12 +9,12 @@ window.ACADEMY_REVIEWED_V76 = Object.freeze({
     "heben ab"
   ],
   "abholzen": [
-    "abholze",
-    "abholzt",
-    "abholzt",
-    "abholzen",
-    "abholzt",
-    "abholzen"
+    "holze ab",
+    "holzt ab",
+    "holzt ab",
+    "holzen ab",
+    "holzt ab",
+    "holzen ab"
   ],
   "abhören": [
     "höre ab",
@@ -81,12 +81,12 @@ window.ACADEMY_REVIEWED_V76 = Object.freeze({
     "atmen"
   ],
   "aufforsten": [
-    "aufforste",
-    "aufforstest",
-    "aufforstet",
-    "aufforsten",
-    "aufforstet",
-    "aufforsten"
+    "forste auf",
+    "forstest auf",
+    "forstet auf",
+    "forsten auf",
+    "forstet auf",
+    "forsten auf"
   ],
   "aufmuntern": [
     "muntere auf",

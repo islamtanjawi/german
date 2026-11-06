@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const KEY='deutsch-exam-errors-v1',root=document.getElementById('examReviewRoot');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let log={};try{const data=JSON.parse(localStorage.getItem(KEY)||'{}');if(data&&typeof data==='object'&&!Array.isArray(data))log=data}catch(e){}
+let log={};try{const data=JSON.parse(localStorage.getItem(KEY)||'{}');if(data&&typeof data==='object'&&!Array.isArray(data))log=Object.fromEntries(Object.entries(data).filter(([id,x])=>x&&typeof x==='object'&&!Array.isArray(x)&&['A1','A2','B1'].includes(x.level)&&typeof x.question==='string'&&typeof x.correct==='string'))}catch(e){}
 let level='all',status='pending',practice=null,feedback='';
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(log));return true}catch(e){return false}};
 function render(){
@@ -15,6 +15,6 @@ root.addEventListener('change',e=>{if(e.target.id==='levelFilter')level=e.target
 root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
 if(b.id==='back'){practice=null;feedback='';render();return}
 if(b.dataset.practice!==undefined){practice=b.dataset.practice;feedback='';render();return}
-if(b.dataset.answer!==undefined&&practice&&!feedback){const x=log[practice],i=Number(b.dataset.answer);feedback=i===Number(x.correctIndex)?'correct':'wrong';if(feedback==='correct'){x.reviewed=true;x.lastReviewed=new Date().toISOString()}else{x.reviewed=false}if(!save())alert('تعذر حفظ التقدم');render();return}
-if(b.dataset.review!==undefined){const x=log[b.dataset.review];if(!x)return;x.reviewed=!x.reviewed;if(!save())alert('تعذر حفظ التقدم');render()}});
+if(b.dataset.answer!==undefined&&practice&&!feedback){const x=log[practice],i=Number(b.dataset.answer);feedback=i===Number(x.correctIndex)?'correct':'wrong';const prev={...x};if(feedback==='correct'){x.reviewed=true;x.lastReviewed=new Date().toISOString()}else{x.reviewed=false}if(!save()){log[practice]=prev;alert('تعذر حفظ التقدم؛ يمكنك إعادة المحاولة.')}render();return}
+if(b.dataset.review!==undefined){const x=log[b.dataset.review];if(!x)return;const wasReviewed=!!x.reviewed;x.reviewed=!wasReviewed;if(!save()){x.reviewed=wasReviewed;alert('تعذر حفظ التقدم؛ يمكنك إعادة المحاولة.')}render()}});
 render();})();

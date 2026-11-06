@@ -78,3 +78,17 @@ button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible
     border-radius:12px;font-size:.85rem;background:var(--card)}
 }
 @media(prefers-reduced-motion:reduce){.topbar nav a{transition:none}}
+
+/* V79: friendly, accessible past-tense micro-exercises. */
+.past-drill{margin:20px 0;padding:17px;border:1px solid var(--line);border-radius:14px;background:var(--acc2)}
+.past-drill h3{margin:0 0 8px;font-size:1.1rem}
+.past-drill .hint{margin:0 0 12px}
+.past-drill-form{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin-top:14px}
+.past-drill-form label{display:flex;flex:1 1 240px;min-width:0;flex-direction:column;gap:6px;font-weight:700}
+.past-drill-form input{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;text-align:left}
+.past-drill-form button{min-height:44px;padding:9px 14px;border-radius:10px;border:1px solid var(--acc);color:var(--acc);background:var(--card);font-weight:700}
+.past-result{width:100%;margin:0;font-weight:700}
+.past-result.good{color:var(--acc)}
+.past-result.bad{color:var(--ink)}
+.past-drill-form input:focus-visible,.past-drill-form button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+@media(max-width:520px){.past-drill{padding:12px}.past-drill-form button{width:100%}}
