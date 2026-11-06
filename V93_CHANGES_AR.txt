@@ -1,0 +1,30 @@
+German Academy V93 — متابعة مراجعة المضارع في A1 وA2 وB1
+
+أضفت 100 جدول Präsens صريحاً (ستة ضمائر) لأفعال موجودة في المنهج:
+A1: 22 | A2: 38 | B1: 40.
+
+أمثلة مقصودة: anwenden -> ich wende an؛ zusammenarbeiten -> ich arbeite zusammen؛
+sich wohlfühlen -> ich fühle mich wohl؛
+abstürzen -> ich stürze ab؛
+sich aufdrängen -> ich dränge mich auf؛
+abmahnen -> ich mahne ab.
+
+فحوص الجودة تشمل جداول الصيغ الستة، أفعال الفصل، الانعكاس، نهايات -eln/-ern،
+بنية البيانات، توافق الملفات مع V92 واختبارات JavaScript.
+
+إحصاء تغطية الجداول بعد التحديث (وليس نسبة الدقة اللغوية أو إنجاز الموقع بالكامل):
+A1: 415/450؛ A2: 233/450؛ B1: 251/450.
+المجموع: 899/1350؛ المتبقي دون جداول صريحة: 451 مدخلاً.
+ملاحظة: جدول sich bewegen في A2 يغطي أيضاً المدخل bewegen الموجود في A1.
+
+لم تتغير شروط الأقفال أو الحسابات السحابية أو صفحات المتصدرين.
+بعض التصريفات القياسية بُنيت بناءً على قواعد سليمة مع اختبارات؛
+لا تعني الاختبارات البرمجية تدقيق كل مدخل تدقيقاً لغوياً مستقلاً.
+
+مصادر للتحقق من أمثلة الفصل:
+https://www.duden.de/konjugation/zusammenarbeiten
+https://www.duden.de/konjugation/ausprobieren
+https://www.duden.de/konjugation/durchfuehren
+https://www.duden.de/konjugation/abstuerzen
+https://www.duden.de/konjugation/aufdraengen
+https://www.duden.de/konjugation/abmahnen

@@ -1,0 +1,8 @@
+طريقة تركيب V93 فوق V92:
+1. حمّل ملف ZIP الصغير وفك الضغط.
+2. في GitHub Desktop اختر german ثم Show in Explorer.
+3. انسخ الملفين conjugation.js و sw.js إلى جذر مستودع german واستبدلهما (Replace).
+4. Summary: German Academy V93؛ ثم Commit to main؛ ثم Push origin.
+5. لا تغيّر Cloudflare أو المراحل المقفلة.
+
+إذا كان إصدارك V82–V91 استخدم ZIP الموحد V93 بدلاً من الصغير.
