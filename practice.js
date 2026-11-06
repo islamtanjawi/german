@@ -98,15 +98,55 @@ function renderListeningReview(){
 }
 function markComplete(l,m,i){const key=taskKey(l,m,i);const update={...done,[key]:true};if(!save(PATH_KEY,update))return false;done=update;return true}
 function say(text){if(!('speechSynthesis' in window)){window.UI?.toast('النطق الآلي غير متاح في هذا المتصفح.');return}const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.86;speechSynthesis.cancel();speechSynthesis.speak(u)}
-function reset(){showText=false;answered=null;transcript='';writeChecks={content:false,review:false};speakChecks={task:false,pronunciation:false};render()}
-function warn(text){const el=$('#practiceMessage');if(el)el.textContent=text;window.UI?.toast(text)}
-// Move the reader to the opened workshop only following an explicit navigation action.
-function revealWorkshop(){
- const target=$('#workshop');if(!target)return;
- const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
- requestAnimationFrame(()=>target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}));
+let activeRecognition=null;
+let voiceRecorder=null,voiceStream=null,voiceChunks=[],voiceUrl=null;
+let voiceMimeType="";
+let voicePermissionPending=false;
+let voiceRequestVersion=0;
+function voiceStatus(message){const el=$('#voiceStatus');if(el)el.textContent=message}
+function releaseVoiceStream(){if(voiceStream){voiceStream.getTracks().forEach(track=>track.stop());voiceStream=null}}
+function clearVoice(){
+ voiceRequestVersion++;
+ if(voiceRecorder&&voiceRecorder.state!=='inactive'){voiceRecorder.onstop=null;try{voiceRecorder.stop()}catch{}}
+ voiceRecorder=null;releaseVoiceStream();voiceChunks=[];voiceMimeType="";
+ if(voiceUrl){URL.revokeObjectURL(voiceUrl);voiceUrl=null}
+}
+async function toggleVoiceRecording(){
+ if(voiceRecorder&&voiceRecorder.state==='recording'){voiceStatus('جارٍ تجهيز التسجيل…');voiceRecorder.stop();return}
+ if(voicePermissionPending)return;
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){voiceStatus('التسجيل الصوتي غير مدعوم في هذا المتصفح.');return}
+ if(!window.isSecureContext){voiceStatus('يحتاج التسجيل إلى HTTPS أو localhost.');return}
+ const targetLevel=level,targetIdx=idx,requestVersion=++voiceRequestVersion;
+ const btn=$('#recordVoice');voicePermissionPending=true;if(btn)btn.disabled=true;
+ voiceStatus('جارٍ طلب إذن الميكروفون…');
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  if(requestVersion!==voiceRequestVersion||mode!=='speak'||level!==targetLevel||idx!==targetIdx||document.hidden){stream.getTracks().forEach(t=>t.stop());return}
+  clearVoice();voiceStream=stream;voiceChunks=[];
+  const recorder=new MediaRecorder(stream);voiceRecorder=recorder;
+  recorder.ondataavailable=e=>{if(e.data?.size)voiceChunks.push(e.data)};
+  recorder.onerror=()=>{voiceStatus('حدث خطأ أثناء التسجيل.');releaseVoiceStream()};
+  recorder.onstop=()=>{
+   releaseVoiceStream();if(voiceRecorder!==recorder)return;
+   const blob=new Blob(voiceChunks,{type:recorder.mimeType||'audio/webm'});
+   voiceMimeType=blob.type;
+   if(blob.size&&mode==='speak'&&level===targetLevel&&idx===targetIdx){
+    if(voiceUrl)URL.revokeObjectURL(voiceUrl);voiceUrl=URL.createObjectURL(blob);
+    const player=$('#voicePlayback');if(player){player.src=voiceUrl;player.hidden=false}
+    const download=$('#downloadVoice');if(download)download.hidden=false;
+    voiceStatus('✓ التسجيل جاهز. يمكنك تشغيل صوتك أو حفظه على جهازك.');
+   }else voiceStatus('لم يتم حفظ تسجيل صوتي. حاول مرة أخرى.');
+   voiceChunks=[];voiceRecorder=null;const button=$('#recordVoice');if(button){button.disabled=false;button.textContent='🎙️ تسجيل جديد'};
+  };
+  recorder.start();voiceStatus('● جارٍ تسجيل صوتك… اضغط إيقاف التسجيل عند الانتهاء.');
+  if(btn){btn.disabled=false;btn.textContent='⏹️ إيقاف التسجيل'}
+ }catch(err){releaseVoiceStream();voiceStatus(err?.name==='NotAllowedError'?'تم رفض إذن الميكروفون. فعّله من إعدادات المتصفح.':'تعذر بدء التسجيل الصوتي.')}
+ finally{voicePermissionPending=false;if(btn?.isConnected)btn.disabled=false}
 }
 
+function reset(){clearVoice();if(activeRecognition){const previous=activeRecognition;activeRecognition=null;previous.onresult=null;previous.onerror=null;try{previous.abort()}catch{}}if('speechSynthesis' in window)window.speechSynthesis.cancel();showText=false;answered=null;transcript='';writeChecks={content:false,review:false};speakChecks={task:false,pronunciation:false};render()}
+function goToWorkshop(){requestAnimationFrame(()=>{const target=$('#workshop');if(!target)return;const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;target.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});target.focus({preventScroll:true})})}
+function warn(text){const el=$('#practiceMessage');if(el)el.textContent=text;window.UI?.toast(text)}
 function render(){
  if(!PATH?.levelOpen(level)){level='A1';mode='listen';idx=0}
  if(!modeOpen(level,mode)){mode='listen';idx=0}
@@ -121,13 +161,23 @@ function render(){
   h+=`<h2>استمع جيداً إلى الجملة</h2><p class="small">هذا نطق آلي من المتصفح وليس تسجيلاً رسمياً. حاول الإجابة دون قراءة النص.</p><div class="actions"><button data-listen>🔊 تشغيل النطق الألماني</button><button data-toggle>${showText?'إخفاء النص':'إظهار النص والترجمة'}</button></div>${showText?`<div class="scenario"><div dir="ltr">${esc(t.de)}</div><p>${esc(t.ar)}</p></div>`:''}<h3>${esc(t.q)}</h3><div class="quiz-options">${options.map((o,i)=>`<button data-option="${i}" ${answered!==null?'disabled':''} class="${answered!==null?(i===correctIndex?'right':i===answered?'wrong':''):''}">${esc(o.text)}</button>`).join('')}</div>`;
   if(answered!==null)h+=`<div class="feedback ${answered===correctIndex?'good':'bad'}" role="status"><strong>${answered===correctIndex?'✓ إجابة صحيحة!':'✗ الإجابة غير صحيحة، جرّب مجدداً.'}</strong><p>الإجابة الصحيحة: <strong dir="auto">${esc(options[correctIndex].text)}</strong></p><p>${esc(t.note||t.ar)}</p><details><summary>راجع الجملة الألمانية والترجمة</summary><p dir="ltr">${esc(t.de)}</p><p>${esc(t.ar)}</p></details></div>${answered!==correctIndex?'<button id="retryListen">🔁 إعادة المحاولة</button>':''}`;
  }else if(mode==='speak'){
-  h+=`<h2>موقف محادثة</h2><div class="scenario">${esc(t.scenario)}</div><p>تحدث بصوت واضح ثم استمع إلى نموذج للتعبير. قارن بنفسك؛ الموقع لا يقيّم النطق آلياً.</p><div class="actions"><button data-listen>🔊 الاستماع إلى النموذج</button><button data-mic>🎙️ التعرف على الكلام (اختياري)</button><button data-toggle>${showText?'إخفاء النموذج':'إظهار النموذج'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.sample)}</div>`:''}${transcript?`<p>النص الذي تعرف عليه الجهاز: <span dir="ltr">${esc(transcript)}</span></p>`:''}<fieldset class="self-check"><legend>تقييم ذاتي قبل المتابعة</legend><label><input type="checkbox" data-speak-check="task" ${speakChecks.task?'checked':''}> تحدثت عن عناصر الموقف المطلوبة</label><label><input type="checkbox" data-speak-check="pronunciation" ${speakChecks.pronunciation?'checked':''}> استمعت إلى النموذج وأعدت المحاولة عند الحاجة</label></fieldset><button id="markSpeak" class="primary">${completed(level,'speak',idx)?'✓ مكتمل — يمكنك الانتقال':'تأكيد إنجاز المحادثة'}</button>`;
+  h+=`<h2>موقف محادثة</h2><div class="scenario">${esc(t.scenario)}</div><p>تحدث بصوت واضح ثم استمع إلى نموذج للتعبير. قارن بنفسك؛ الموقع لا يقيّم النطق آلياً.</p><div class="actions"><button data-listen>🔊 الاستماع إلى النموذج</button><button data-mic>🎙️ التعرف على الكلام (اختياري)</button><button data-toggle>${showText?'إخفاء النموذج':'إظهار النموذج'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.sample)}</div>`:''}<section class="voice-panel" aria-label="مساحة تسجيل الصوت"><h3>🎙️ تسجيل صوتك</h3><p class="small">سجّل إجابتك واستمع إليها هنا. التسجيل مؤقت على جهازك ولا يُرفع إلى الخادم، وسيُحذف عند تغيير التدريب أو مغادرة الصفحة.</p><div class="actions"><button type="button" id="recordVoice">🎙️ ابدأ التسجيل</button><button type="button" id="deleteVoice">🗑️ حذف التسجيل</button><button type="button" id="downloadVoice" hidden>⬇️ حفظ صوتي</button></div><p id="voiceStatus" role="status" aria-live="polite">اضغط ابدأ التسجيل ثم تحدث بالألمانية.</p><audio id="voicePlayback" controls hidden aria-label="استمع إلى تسجيل صوتك"></audio></section>${transcript?`<p>النص الذي تعرف عليه الجهاز: <span dir="ltr">${esc(transcript)}</span></p>`:''}<fieldset class="self-check"><legend>تقييم ذاتي قبل المتابعة</legend><label><input type="checkbox" data-speak-check="task" ${speakChecks.task?'checked':''}> تحدثت عن عناصر الموقف المطلوبة</label><label><input type="checkbox" data-speak-check="pronunciation" ${speakChecks.pronunciation?'checked':''}> استمعت إلى النموذج وأعدت المحاولة عند الحاجة</label></fieldset><button id="markSpeak" class="primary">${completed(level,'speak',idx)?'✓ مكتمل — يمكنك الانتقال':'تأكيد إنجاز المحادثة'}</button>`;
  }else{
   const draft=typeof saved[k]==='string'?saved[k]:'';const count=wordCount(draft),target=wordsNeeded(level);
   h+=`<h2>تدريب الكتابة</h2><div class="scenario">${esc(t.write)}</div><p class="small">الحد الأدنى لهذه الممارسة: ${target} كلمة (ليس معيار Goethe الرسمي).</p><label for="draft">إجابتك بالألمانية</label><textarea id="draft" dir="ltr" maxlength="3000" placeholder="Schreibe hier auf Deutsch...">${esc(draft)}</textarea><div class="progress-row"><span id="wordCount" aria-live="polite">${count} / ${target} كلمة</span><span id="draftState">تُحفظ المسودة أثناء الكتابة على جهازك</span></div><fieldset class="self-check"><legend>تأكد من عملك بنفسك</legend><label><input type="checkbox" data-write-check="content" ${writeChecks.content?'checked':''}> تناولت جميع عناصر المهمة</label><label><input type="checkbox" data-write-check="review" ${writeChecks.review?'checked':''}> راجعت ترتيب الجملة والإملاء وعلامات الترقيم</label></fieldset><div class="actions"><button id="saveDraft" class="primary">${completed(level,'write',idx)?'✓ حفظ النص المحدّث':'حفظ وإنهاء التدريب'}</button><button data-toggle>${showText?'إخفاء المثال':'عرض مثال للمساعدة'}</button></div>${showText?`<div class="scenario" dir="ltr">${esc(t.writeSample)}</div>`:''}<p class="small">لا يُصحح الموقع الكتابة آلياً. اطلب من مدرس مراجعتها عندما تستطيع.</p>`;
  }
  h+=`<p id="practiceMessage" class="small" role="status" aria-live="polite"></p><div class="actions"><button id="prev" ${idx===0?'disabled':''}>السابق</button><button id="next" ${idx===sets[level].length-1||!taskOpen(level,mode,idx+1)?'disabled':''}>${idx===sets[level].length-1?'آخر تدريب':taskOpen(level,mode,idx+1)?'التالي ←':'🔒 أكمل التدريب الحالي أولاً'}</button></div>`;
  $('#workshop').innerHTML=h;
+ // The speech-recognition result / model toggle rerenders this section. Keep the
+ // learner's existing recording visible until they explicitly clear it or switch tasks.
+ if(mode==='speak'){
+  const player=$('#voicePlayback'),download=$('#downloadVoice'),record=$('#recordVoice');
+  if(voiceUrl&&player){player.src=voiceUrl;player.hidden=false;if(download)download.hidden=false;voiceStatus('✓ تسجيلك جاهز. يمكنك الاستماع إليه أو حفظه.');}
+  if(voiceRecorder?.state==='recording'){
+   if(record)record.textContent='⏹️ إيقاف التسجيل';
+   voiceStatus('● جارٍ تسجيل صوتك… اضغط إيقاف التسجيل عند الانتهاء.');
+  }
+ }
 }
 function updateDraft(text){
  const key=`${level}-${idx}`,draft=String(text).slice(0,3000);
@@ -137,18 +187,36 @@ function updateDraft(text){
  const counter=$('#wordCount');if(counter)counter.textContent=`${wordCount(draft)} / ${wordsNeeded(level)} كلمة`;
  return ok;
 }
-function speakRecognition(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){warn('ميزة التعرف على الكلام غير متاحة في هذا المتصفح.');return}try{const r=new R();r.lang='de-DE';r.interimResults=false;r.onresult=e=>{transcript=e.results[0][0].transcript;render()};r.onerror=()=>warn('تعذر التعرف على الكلام. تحقق من إذن الميكروفون.');r.start()}catch{warn('تعذر تشغيل الميكروفون.')}}
+function stopRecognition(){if(!activeRecognition)return;const r=activeRecognition;activeRecognition=null;r.onresult=null;r.onerror=null;r.onend=null;try{r.abort()}catch{}}
+function speakRecognition(){
+ const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!R){warn('ميزة التعرف على الكلام غير متاحة في هذا المتصفح.');return}
+ if(!window.isSecureContext){warn('الميكروفون يحتاج اتصال HTTPS آمناً.');return}
+ if(activeRecognition){warn('الميكروفون يعمل بالفعل؛ انتظر النتيجة.');return}
+ try{
+  const r=new R();activeRecognition=r;r.lang='de-DE';r.interimResults=false;r.maxAlternatives=1;
+  r.onresult=e=>{if(activeRecognition!==r)return;const result=e.results?.[0]?.[0]?.transcript;if(typeof result==='string'&&result.trim()){transcript=result.trim();render()}else warn('لم يُلتقط كلام واضح. حاول مرة أخرى.')};
+  r.onerror=e=>{if(activeRecognition!==r)return;const messages={'not-allowed':'تم رفض إذن الميكروفون. فعّله من إعدادات المتصفح.','audio-capture':'لم يتم العثور على ميكروفون يعمل.','no-speech':'لم يُسمع كلام واضح. حاول مرة أخرى.',network:'تعذر الاتصال بخدمة التعرف على الكلام.'};warn(messages[e.error]||'تعذر التعرف على الكلام. حاول مرة أخرى.')};
+  r.onend=()=>{if(activeRecognition===r)activeRecognition=null};r.start();
+ }catch{stopRecognition();warn('تعذر تشغيل الميكروفون.')}
+}
+function stopAudioOnLeave(){
+ clearVoice();stopRecognition();
+ if('speechSynthesis' in window){try{window.speechSynthesis.cancel()}catch{}}
+}
+window.addEventListener('pagehide',stopAudioOnLeave);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAudioOnLeave()});
 $('#workshop').addEventListener('input',e=>{if(e.target.id==='draft'&&mode==='write')updateDraft(e.target.value)});
 $('#workshop').addEventListener('change',e=>{if(e.target.dataset.writeCheck){writeChecks[e.target.dataset.writeCheck]=e.target.checked}else if(e.target.dataset.speakCheck){speakChecks[e.target.dataset.speakCheck]=e.target.checked}});
 $('#listeningReview').addEventListener('click',e=>{
  const b=e.target.closest('[data-review-listen]');if(!b)return;
  const i=Number(b.dataset.reviewListen);
  if(!Number.isInteger(i)||!taskOpen(level,'listen',i))return;
- mode='listen';idx=i;reset();revealWorkshop();
+ mode='listen';idx=i;reset();goToWorkshop();
 });
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b){const card=e.target.closest('.skill-card');const button=card?.querySelector('button[data-mode]');if(button&&!button.disabled)button.click();return}
- if(b.dataset.mode){if(!modeOpen(level,b.dataset.mode))return;mode=b.dataset.mode;idx=0;reset();revealWorkshop();return}
- if(b.dataset.level){if(!PATH?.levelOpen(b.dataset.level))return;level=b.dataset.level;mode='listen';idx=0;reset();revealWorkshop();return}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.mode){if(!modeOpen(level,b.dataset.mode))return;mode=b.dataset.mode;idx=0;reset();goToWorkshop();return}
+ if(b.dataset.level){if(!PATH?.levelOpen(b.dataset.level))return;level=b.dataset.level;mode='listen';idx=0;reset();goToWorkshop();return}
  if(b.dataset.listen!==undefined){say(mode==='speak'?sets[level][idx].sample:sets[level][idx].de);return}
  if(b.dataset.toggle!==undefined){showText=!showText;render();return}
  if(b.dataset.option!==undefined&&answered===null&&mode==='listen'){
@@ -169,8 +237,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b){
   if(!writeChecks.content||!writeChecks.review){warn('أكمل قائمتي المراجعة الذاتية قبل إنهاء التدريب.');return}
   if(markComplete(level,'write',idx)){window.UI?.toast('✓ حُفظت الإجابة وفُتح التدريب التالي');render()}return
  }
- if(b.id==='next'&&idx<sets[level].length-1&&taskOpen(level,mode,idx+1)){idx++;reset();return}
- if(b.id==='prev'&&idx>0){idx--;reset();return}
+ if(b.id==='next'&&idx<sets[level].length-1&&taskOpen(level,mode,idx+1)){idx++;reset();goToWorkshop();return}
+ if(b.id==='prev'&&idx>0){idx--;reset();goToWorkshop();return}
+ if(b.id==='recordVoice'){toggleVoiceRecording();return}
+ if(b.id==='downloadVoice'&&voiceUrl){const a=document.createElement('a');a.href=voiceUrl;a.download=`deutsch-${level.toLowerCase()}-sprechen-${idx+1}.${voiceMimeType.includes('mp4')?'m4a':'webm'}`;document.body.appendChild(a);a.click();a.remove();return}
+ if(b.id==='deleteVoice'){clearVoice();const player=$('#voicePlayback');if(player){player.removeAttribute('src');player.load();player.hidden=true}const download=$('#downloadVoice');if(download)download.hidden=true;voiceStatus('تم حذف التسجيل من هذه الجلسة.');const button=$('#recordVoice');if(button)button.textContent='🎙️ ابدأ التسجيل';return}
  if(b.dataset.mic!==undefined){speakRecognition();return}
 });
 render();

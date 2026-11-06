@@ -35,5 +35,12 @@ function scan(n){if(n.nodeType!==1)return[0,0];const g=(n.matches(GOOD)?1:0)+n.q
 function watch(){new MutationObserver(ms=>{if(Date.now()-last>700)return;let g=0,b=0;ms.forEach(m=>{const ns=m.type==='childList'?m.addedNodes:[m.target];ns.forEach(n=>{const r=scan(n);g+=r[0];b+=r[1]})});if(g||b)play(b>g?'bad':'ok')}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})}
 function init(){dock();watch()}
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+// Stop browser speech when the learner switches tabs or leaves any academy page.
+// This also covers pages that do not manage speech lifecycle themselves.
+function stopPageSpeech(){
+ try{if('speechSynthesis' in window)window.speechSynthesis.cancel()}catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPageSpeech()});
+window.addEventListener('pagehide',stopPageSpeech);
 window.UI={play,toast};
 })();

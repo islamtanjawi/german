@@ -7,3 +7,7 @@
 قيود مهمة: محتوى Goethe تدريب أصلي محدود وليس امتحان Goethe الرسمي الكامل، ويحتاج توسيعاً ومراجعة لغوية قبل الادعاء بأنه محاكاة كاملة. تقييم الكتابة والتحدث ذاتي وليس آلياً معتمداً. التصريف الكامل لجميع الأفعال الشاذة غير متحقق؛ توجد روابط قاموس عند غياب الصيغة المؤكدة. الصوت يعتمد على المتصفح وقد يحتاج الإنترنت. حفظ التقدم محلي في المتصفح ولا ينتقل بين الأجهزة.
 
 طريقة النشر: احتفظ بنسخة احتياطية، ثم ارفع جميع الملفات الموجودة داخل german-site إلى مستودع GitHub Pages بنفس البنية. افتح الموقع عبر HTTPS ثم أعد تحميله بعد التحديث ليتجدد مخزن PWA.
+
+V55: Correct active-page navigation matching (same-origin, path-aware), with preserved V54 mobile navigation styling. Updated offline cache version. No learner data or progress keys changed.
+
+V56: Skill buttons, listening-review entries and previous/next training controls now scroll to the active workshop; keyboard focus follows. Respects reduced-motion preferences. No changes to learning records, locks, or cloud settings.

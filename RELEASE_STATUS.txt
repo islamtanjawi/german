@@ -1,6 +1,1 @@
-German Academy — V45 development build (not a final release)
-Verified in Chromium mock test harness: 11 pages, shared-browser account separation, expired/revoked-session isolation, cloud error display, locked lessons/levels, Goethe exam flow A1/A2/B1.
-Reviewed verb conjugations: 185 of 1,350 entries have explicit Präsens tables as of V41. All others still require linguistic review. Goethe practice has 84 original reading/listening questions (28 per level), not official examinations or recordings. Writing and speaking remain self-assessed.
-Cloudflare Worker/D1 service is included but NOT deployed or configured; no real cross-device synchronization until deployed and tested. Back up progress before moving between devices.
-Static JS syntax and asset paths checked; Worker simulated with SQLite, but no live Cloudflare/GitHub Pages deployment test was performed.
-Original list of 73 tasks has not been recovered for item-by-item completion accounting; don't infer completion count from file count or release number.
+German Academy V71 development build. Static checks only; browser microphone, offline mode, and live cloud synchronization not verified in this build. Account deployment reported by user, not independently tested here. Preserved existing progress keys and learning content except the documented B1 wording correction.
