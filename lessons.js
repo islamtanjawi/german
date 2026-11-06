@@ -84,9 +84,19 @@ function submitExam(){
  ex.submitted=true;ex.saved=false;ex.saveFailed=false;
  persistCourseExam();renderExam();
 }
-function openLesson(id){const l=LESSONS.find(x=>x.id===id);if(!l)return;if(!PATH.lessonOpen(l,LESSONS)){window.UI?.toast(!PATH.levelOpen(l.level)?PATH.reason(l.level):'🔒 أكمل الدرس السابق واجتز تمارينه أولاً');return}active=id;renderLesson();if(window.innerWidth<700)$('#lessonPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+// V101: bring newly opened lesson content into view on desktop and mobile.
+// Respect reduced-motion preferences and wait until the panel has been rendered.
+function scrollToLessonPanel(){
+ const panel=$('#lessonPanel');
+ if(!panel)return;
+ const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ window.requestAnimationFrame(()=>{
+  panel.scrollIntoView({behavior:reducedMotion?'auto':'smooth',block:'start'});
+ });
+}
+function openLesson(id){const l=LESSONS.find(x=>x.id===id);if(!l)return;if(!PATH.lessonOpen(l,LESSONS)){window.UI?.toast(!PATH.levelOpen(l.level)?PATH.reason(l.level):'🔒 أكمل الدرس السابق واجتز تمارينه أولاً');return}active=id;renderLesson();scrollToLessonPanel();}
 $('#lessonList').addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openLesson(b.dataset.open)});
-$('#examEntry').addEventListener('click',()=>{renderExamHome();if(window.innerWidth<700)$('#lessonPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+$('#examEntry').addEventListener('click',()=>{renderExamHome();scrollToLessonPanel();});
 $('#search').addEventListener('input',e=>{query=e.target.value;renderList()});
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));renderList()}));
 document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{levelFilter=b.dataset.level;document.querySelectorAll('[data-level]').forEach(x=>x.classList.toggle('active',x===b));const first=visibleLessons()[0];if(first)active=first.id;renderLesson()}));
