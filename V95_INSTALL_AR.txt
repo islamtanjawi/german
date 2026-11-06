@@ -1,0 +1,5 @@
+طريقة التثبيت:
+- إن كان الموقع على V94 استخدم ZIP الصغير؛ وإن كان على V82 إلى V93 استخدم الحزمة الموحدة.
+- فك الضغط وانسخ ملفات JavaScript إلى جذر german مع Replace عبر GitHub Desktop.
+- Commit to main ثم Push origin.
+- لا تغير Cloudflare أو أقفال المراحل.

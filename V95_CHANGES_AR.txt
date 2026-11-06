@@ -1,0 +1,15 @@
+German Academy V95 — تقدم في تصريفات A2 وB1
+
+- إضافة جداول مضارع صريحة لأفعال منتظمة ومنفصلة وانعكاسية محددة من المنهج.
+- استثناء «sich ereignen» و«bevorstehen» من الجدول الشخصي ذي الضمائر الستة في المعنى المقصود؛ وضع صيغ الغائب الصحيحة وشروح قصيرة.
+- عدم تغيير حسابات Cloudflare أو شروط فتح المراحل أو أي نتائج مستخدم.
+- لا تعني الفحوص البرمجية أن كل الترجمة الألمانية/العربية قد دُقِّقت لغوياً بشكل مستقل.
+
+مراجع:
+https://www.duden.de/konjugation/ereignen
+https://www.duden.de/konjugation/bevorstehen
+https://www.duden.de/konjugation/einbuergern
+https://www.duden.de/konjugation/anfechten
+https://www.duden.de/konjugation/unterschlagen_unterschlagen
+
+الجداول المضافة: A2 137، B1 142. المتبقي: A1=1، A2=40، B1=31.
