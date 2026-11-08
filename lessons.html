@@ -8,7 +8,8 @@
   <meta name="description" content="دروس ألمانية منظمة مع شرح عربي وأمثلة وتمارين تفاعلية من A1 إلى B1.">
   <title>الدروس الألمانية | مدرّبي الألماني</title>
   <link rel="stylesheet" href="lessons.css">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="legal-footer.css"></head>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="legal-footer.css"><link rel="stylesheet" href="academy-ads.css">
+</head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-mark">DE</span><span><strong>مدرّبي الألماني</strong><small>مساحة الدروس</small></span></a>
@@ -19,6 +20,14 @@
       <div class="hero-copy"><span class="eyebrow">LEARN · PRACTICE · REPEAT</span><h1>تعلّم الألمانية خطوة بخطوة</h1><p>دروس واسعة ومنظمة، شرح بالعربية، أمثلة مترجمة، جداول واضحة وتمارين مع تصحيح فوري.</p></div>
       <div class="hero-progress"><div class="progress-head"><span>تقدمك في الدروس</span><strong id="progressText">0%</strong></div><div class="progress-track"><i id="progressBar"></i></div><small id="progressCount">0 من 64 درساً</small></div>
     </section>
+  <!-- Google AdSense: 728x90 lessons unit, desktop-only. -->
+  <aside class="academy-ad academy-ad--desktop" data-academy-ad="lessons" hidden aria-label="مساحة إعلانية">
+    <span class="academy-ad-label">إعلان · Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-8238267046509365"
+         data-ad-slot="8137390094"></ins>
+  </aside>
     <div class="course-layout">
       <aside class="sidebar">
         <div class="sidebar-title"><div><span class="eyebrow">A1 · A2 · B1</span><h2>فهرس الدروس</h2></div><span class="count-pill" id="lessonCount">24</span></div>
@@ -49,5 +58,7 @@
   <script src="cloud-config.js"></script><script src="cloud-sync.js"></script><script src="ui.js"></script>
 <script src="learning-path.js"></script><script src="lessons-advanced.js"></script>
   <script src="lessons.js?v=102"></script>
-<script src="pwa.js"></script><script src="nav-highlight.js"></script></body>
+<script src="pwa.js"></script><script src="nav-highlight.js"></script><script src="academy-ads-config.js"></script>
+<script src="academy-ads.js"></script>
+</body>
 </html>

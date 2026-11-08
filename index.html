@@ -8,7 +8,8 @@
 <meta name="description" content="منصة شخصية لتعلّم الألمانية من A1 إلى B1 مع كلمات يومية واختبارات ومراجعة ذكية.">
 <title>مدرّبي الألماني | A1 – B1</title>
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="legal-footer.css"></head>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="stylesheet" href="legal-footer.css"><link rel="stylesheet" href="academy-ads.css">
+</head>
 <body>
 <header>
   <div class="brand"><span class="brand-icon">DE</span><div><h1>مدرّبي الألماني <small>A1 – B1</small></h1><p>خطوة صغيرة كل يوم تصنع فرقاً كبيراً.</p></div></div>
@@ -18,6 +19,16 @@
 <main>
   <section id="head"></section>
   <section id="dashboard" class="dashboard"></section>
+  <!-- Google AdSense: responsive home page unit. -->
+  <aside class="academy-ad" data-academy-ad="home" hidden aria-label="مساحة إعلانية">
+    <span class="academy-ad-label">إعلان · Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8238267046509365"
+         data-ad-slot="3189536938"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </aside>
   <div class="learning-shell">
     <aside class="learning-menu" aria-label="خريطة التعلم">
       <div class="menu-heading"><span class="eyebrow">مسارك اليوم</span><h2>اختر ما تريد تعلمه</h2><p>أقسام أفقية واضحة. اختر القسم وابدأ التعلم، ثم اجتز المراحل بالتدرّج.</p></div>
@@ -55,5 +66,7 @@
 <script src="ui.js"></script>
 <script src="learning-path.js"></script>
 <script src="app.js"></script>
-<script src="welcome.js"></script><script src="pwa.js"></script></body>
+<script src="welcome.js"></script><script src="pwa.js"></script><script src="academy-ads-config.js"></script>
+<script src="academy-ads.js"></script>
+</body>
 </html>
