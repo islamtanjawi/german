@@ -1,0 +1,6 @@
+/* Legal navigation only; does not modify lesson or account layouts. */
+.academy-legal-nav{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:6px 15px!important;margin:15px auto 0!important;padding:12px 5px!important;max-width:1000px!important;border-top:1px solid var(--line,#d7e5e0)!important;overflow:visible!important;white-space:normal!important}
+.academy-legal-nav a{color:var(--ink,#172b2d)!important;font-size:.87rem!important;text-decoration:underline!important;text-underline-offset:3px!important;line-height:1.7!important;min-height:30px!important;display:inline-flex!important;align-items:center!important;padding:2px!important;border:0!important;white-space:normal!important;background:transparent!important;box-shadow:none!important}
+.academy-legal-nav a:focus-visible{outline:3px solid #db9b2f!important;outline-offset:2px!important}
+.academy-legal-footer{text-align:center;margin:25px auto;padding:10px 14px;max-width:1100px}
+@media(prefers-color-scheme:dark){.academy-legal-nav a{color:var(--ink,#e7f3ef)!important}}

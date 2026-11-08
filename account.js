@@ -15,7 +15,7 @@ async function readConsent(){
   label.textContent=data.public?`اسمك ظاهر في المتصدرين · ${data.percent}% من المراحل`:'اسمك غير ظاهر في لوحة المتصدرين.';
  }catch(err){if(requestNo===consentRequest)label.textContent=err.message+' — لم يتغير إعداد الظهور.'}
 }
-function mode(reg){create=reg;$('registerTab').classList.toggle('active',reg);$('loginTab').classList.toggle('active',!reg);$('accountFormTitle').textContent=reg?'إنشاء حساب جديد':'تسجيل الدخول';$('submitAccount').textContent=reg?'إنشاء حساب وحفظ التقدم':'دخول ومزامنة التقدم';$('password').setAttribute('autocomplete',reg?'new-password':'current-password')}
+function mode(reg){create=reg;$('registerTab').classList.toggle('active',reg);$('loginTab').classList.toggle('active',!reg);$('accountFormTitle').textContent=reg?'إنشاء حساب جديد':'تسجيل الدخول';$('submitAccount').textContent=reg?'إنشاء حساب وحفظ التقدم':'دخول ومزامنة التقدم';$('password').setAttribute('autocomplete',reg?'new-password':'current-password');const box=$('accountLegalConfirm'),check=$('accountLegalAccept');if(box&&check){box.hidden=!reg;check.required=reg;if(!reg)check.checked=false}}
 function message(s){$('accountMessage').textContent=s}
 $('registerTab').addEventListener('click',()=>mode(true));$('loginTab').addEventListener('click',()=>mode(false));
 $('accountForm').addEventListener('submit',async e=>{e.preventDefault();const b=$('submitAccount');if(b.disabled)return;b.disabled=true;message('جارٍ التحقق من الحساب...');try{
